@@ -1,0 +1,129 @@
+site_name: 42 CPP Modules Guide
+site_description: C経験者のための 42 CPP Modules (cpp00-04) 完全解説
+site_url: https://tsunanko.github.io/cpp-modules-guide/
+
+docs_dir: docs
+site_dir: site
+
+theme:
+  name: material
+  language: ja
+  palette:
+    - media: "(prefers-color-scheme: light)"
+      scheme: default
+      primary: indigo
+      accent: indigo
+      toggle:
+        icon: material/weather-sunny
+        name: ダークモードへ
+    - media: "(prefers-color-scheme: dark)"
+      scheme: slate
+      primary: indigo
+      accent: indigo
+      toggle:
+        icon: material/weather-night
+        name: ライトモードへ
+  font:
+    text: Noto Sans JP
+    code: JetBrains Mono
+  features:
+    - navigation.instant
+    - navigation.tracking
+    - navigation.tabs
+    - navigation.sections
+    - navigation.indexes
+    - navigation.top
+    - toc.follow
+    - search.suggest
+    - search.highlight
+    - search.share
+    - content.code.copy
+    - content.code.annotate
+    - content.tabs.link
+    - content.action.edit
+
+markdown_extensions:
+  - admonition
+  - attr_list
+  - def_list
+  - footnotes
+  - md_in_html
+  - tables
+  - toc:
+      permalink: true
+  - pymdownx.details
+  - pymdownx.superfences
+  - pymdownx.highlight:
+      anchor_linenums: true
+      line_spans: __span
+      pygments_lang_class: true
+  - pymdownx.inlinehilite
+  - pymdownx.snippets
+  - pymdownx.tabbed:
+      alternate_style: true
+  - pymdownx.tasklist:
+      custom_checkbox: true
+  - pymdownx.keys
+  - pymdownx.mark
+  - pymdownx.caret
+  - pymdownx.tilde
+
+plugins:
+  - search:
+      lang:
+        - ja
+        - en
+
+extra_css:
+  - stylesheets/extra.css
+
+extra_javascript:
+  - js/user-notes.js
+
+nav:
+  - はじめに: index.md
+  - C→C++入門:
+      - intro/c-vs-cpp.md
+      - 開発環境: intro/setup.md
+      - 対応表チートシート: intro/cheatsheet.md
+      - ディフェンスの流れ: intro/defense-flow.md
+  - cpp00:
+      - cpp00/index.md
+      - ex00 Megaphone: cpp00/ex00-megaphone.md
+      - ex01 PhoneBook: cpp00/ex01-phonebook.md
+      - ex02 Account: cpp00/ex02-account.md
+      - 評価対策: cpp00/eval.md
+  - cpp01:
+      - cpp01/index.md
+      - ex00 Zombie: cpp01/ex00-zombie.md
+      - ex01 zombieHorde: cpp01/ex01-zombie-horde.md
+      - ex02 Brain: cpp01/ex02-brain.md
+      - ex03 Weapon: cpp01/ex03-weapon.md
+      - ex04 Sed: cpp01/ex04-sed.md
+      - ex05 Harl: cpp01/ex05-harl.md
+      - ex06 Harl filter: cpp01/ex06-harl-filter.md
+      - 評価対策: cpp01/eval.md
+  - cpp02:
+      - cpp02/index.md
+      - ex00 Fixed (OCF): cpp02/ex00-fixed-canon.md
+      - ex01 Fixed (変換): cpp02/ex01-fixed-constructors.md
+      - ex02 Fixed (演算子): cpp02/ex02-fixed-operators.md
+      - ex03 BSP: cpp02/ex03-bsp.md
+      - 評価対策: cpp02/eval.md
+  - cpp03:
+      - cpp03/index.md
+      - ex00 ClapTrap: cpp03/ex00-claptrap.md
+      - ex01 ScavTrap: cpp03/ex01-scavtrap.md
+      - ex02 FragTrap: cpp03/ex02-fragtrap.md
+      - ex03 DiamondTrap: cpp03/ex03-diamondtrap.md
+      - 評価対策: cpp03/eval.md
+  - cpp04:
+      - cpp04/index.md
+      - ex00 Animal: cpp04/ex00-polymorphism.md
+      - ex01 Brain: cpp04/ex01-brain.md
+      - ex02 Abstract: cpp04/ex02-abstract.md
+      - ex03 Materia: cpp04/ex03-materia.md
+      - 評価対策: cpp04/eval.md
+  - リファレンス:
+      - 用語集: reference/glossary.md
+      - 提出前チェック: reference/submit-check.md
