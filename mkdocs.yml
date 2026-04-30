@@ -26,6 +26,8 @@ theme:
   font:
     text: Noto Sans JP
     code: JetBrains Mono
+  icon:
+    logo: material/code-tags
   features:
     - navigation.instant
     - navigation.tracking
@@ -52,7 +54,11 @@ markdown_extensions:
   - toc:
       permalink: true
   - pymdownx.details
-  - pymdownx.superfences
+  - pymdownx.superfences:
+      custom_fences:
+        - name: mermaid
+          class: mermaid
+          format: !!python/name:pymdownx.superfences.fence_code_format
   - pymdownx.highlight:
       anchor_linenums: true
       line_spans: __span
@@ -67,12 +73,18 @@ markdown_extensions:
   - pymdownx.mark
   - pymdownx.caret
   - pymdownx.tilde
+  - pymdownx.emoji:
+      emoji_index: !!python/name:material.extensions.emoji.twemoji
+      emoji_generator: !!python/name:material.extensions.emoji.to_svg
 
 plugins:
   - search:
       lang:
         - ja
         - en
+
+hooks:
+  - hooks/breadcrumbs.py
 
 extra_css:
   - stylesheets/extra.css
