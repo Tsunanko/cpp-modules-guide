@@ -16,6 +16,22 @@
 
 ---
 
+## 🎯 なぜこの問題？（学習意図）
+
+42 が cpp01 の最初にこれを置く理由：
+
+| 学ばせたいこと | この問題で出会う形 |
+|---|---|
+| **ヒープ確保** (`new`) | C の `malloc` + 手動初期化 1 ステップから、`new Zombie("name")` で確保 + 構築まで 1 行に |
+| **ヒープ解放** (`delete`) | C の `free` + 手動破棄から、`delete z` で破棄 + 解放まで 1 行に |
+| **スタック vs ヒープ** | 関数を抜けると消えるオブジェクト と、自分で消すまで残るオブジェクトの違い |
+| **「いつ確保すべきか」の判断** | `newZombie` (ヒープ) と `randomChump` (スタック) の使い分けが課題で問われる |
+
+つまり「**メモリの寿命をプログラマが操る感覚**」を最短コードで体感させるのが狙い。
+cpp02 以降の OCF（コピー / 代入）、cpp03 の継承、cpp04 の多態性も全部この「**いつ生まれて、いつ死ぬか**」の理解が前提です。
+
+---
+
 ## 1. このexerciseで学ぶこと
 
 - **`new`** でヒープにオブジェクトを作る
@@ -385,28 +401,22 @@ HeapZombie has been destroyed
 
 ### プログラムの流れ
 
-```
-スタート
-  |
-  v
-newZombie("HeapZombie") を呼ぶ
-  |  → new で Zombie をヒープに作る
-  |  → ポインタを返す
-  v
-ヒープゾンビの announce() を呼ぶ
-  |  → "HeapZombie: BraiiiiiiinnnzzzZ..."
-  v
-randomChump("StackZombie") を呼ぶ
-  |  → スタックに Zombie を作る
-  |  → announce() を呼ぶ
-  |  → 関数終了 → 自動で破棄される
-  |     "StackZombie has been destroyed"
-  v
-delete heap を呼ぶ
-  |  → ヒープゾンビが破棄される
-  |     "HeapZombie has been destroyed"
-  v
-終了
+```mermaid
+flowchart TD
+    Start([プログラム開始]) --> NewZ["newZombie('HeapZombie')<br/>= new + 構築"]
+    NewZ --> HeapAnn["heap->announce()<br/>HeapZombie: BraiiiiiiinnnzzzZ..."]
+    HeapAnn --> RandomC["randomChump('StackZombie')<br/>= スタック構築 + announce()"]
+    RandomC --> StackDtor[関数終了で自動破棄<br/>StackZombie has been destroyed]
+    StackDtor --> DelH["delete heap<br/>= 破棄 + 解放"]
+    DelH --> HeapDtor[HeapZombie has been destroyed]
+    HeapDtor --> End([プログラム終了])
+
+    style Start fill:#E3F2FD
+    style End fill:#C8E6C9
+    style NewZ fill:#FFE0B2
+    style DelH fill:#FFCDD2
+    style StackDtor fill:#C8E6C9
+    style HeapDtor fill:#C8E6C9
 ```
 
 ### Zombie.hpp（ヘッダファイル）
@@ -639,15 +649,15 @@ int main(void) {
 
 ## 9. ディフェンスで聞かれること
 
-| 質問 | 答え方 |
-|------|--------|
-| `new` と `malloc` の違いは？ | `new` はコンストラクタを呼ぶ。`malloc` はメモリを確保するだけ |
-| `delete` と `free` の違いは？ | `delete` はデストラクタを呼んでから解放。`free` は即解放 |
-| スタックとヒープの違いは？ | スタックは関数終了で自動破棄。ヒープは `delete` するまで残る |
-| なぜ `newZombie` はヒープに作る？ | 関数の外でもオブジェクトを使いたいから |
-| なぜ `randomChump` はスタックで十分？ | 関数の中だけで使って外に持ち出さないから |
-| 初期化子リストとは？ | コンストラクタ本体の前に `: _name(name)` で初期化する書き方 |
-| ダングリングポインタとは？ | もう存在しないものを指すポインタ。スタック変数のアドレスを返すと起きる |
+| 質問 | 答え方 | 実装で言うと |
+|------|--------|-------------|
+| `new` と `malloc` の違いは？ | `new` はメモリ確保 + コンストラクタ呼び出し。`malloc` は確保だけ | `newZombie.cpp` の `return new Zombie(name);` で確保と構築が 1 行 |
+| `delete` と `free` の違いは？ | `delete` はデストラクタ + 解放。`free` は即解放のみ | `main.cpp` 末尾の `delete heap;` で `~Zombie()` が呼ばれて `destroyed` を出力 |
+| スタックとヒープの違いは？ | スタックは関数終了で自動破棄。ヒープは `delete` するまで残る | `randomChump` 内の `Zombie z(name);` はスタック、`newZombie` の `new Zombie(...)` はヒープ |
+| なぜ `newZombie` はヒープに作る？ | 関数の外でもポインタとして使い続けたいから | `Zombie* heap = newZombie("HeapZombie");` のように呼び出し側が寿命を握る |
+| なぜ `randomChump` はスタックで十分？ | 関数内だけで使って外に持ち出さない | `randomChump.cpp`: 関数内で `announce()` まで完結。return 不要 |
+| 初期化子リストとは？ | コンストラクタ本体の前に `: _name(name)` で初期化 | `Zombie::Zombie(std::string name) : _name(name) {}` で 1 行 |
+| ダングリングポインタとは？ | もう存在しないものを指すポインタ。スタック変数のアドレスを返すと起きる | `randomChump` で生成した `Zombie z` のアドレスを return するとアウト（今回はやっていない） |
 
 ---
 
@@ -675,6 +685,27 @@ int main(void) {
         // ダメ！ z はすぐ消える
     }
     ```
+
+---
+
+## 💡 ここまでの学びのまとめ
+
+このページで身についたこと:
+
+- **`new` = malloc + コンストラクタ**、**`delete` = デストラクタ + free** の 1 行版
+- **スタック**: `Zombie z;` 関数終了で自動破棄。**ヒープ**: `new Zombie(...)` `delete` するまで残る
+- 「**寿命を呼び出し元に渡したい**」ならヒープ、「関数内で完結」ならスタック
+- **コンストラクタの初期化子リスト** で `_name` を構築時に確定
+- **デストラクタが destroyed メッセージを出す** から、いつ消えるか観察できる
+
+!!! tip "ここで詰まったら"
+    - 「`delete` を忘れた」→ **メモリリーク**。valgrind で 1 件出る
+    - 「`delete` を 2 回呼んだ」→ **二重解放**で SIGABRT
+    - 「ローカル変数のアドレスを返した」→ **ダングリングポインタ**。関数を抜けた瞬間アクセス禁止
+
+次の [ex01 Moar brainz!](ex01-zombie-horde.md) では
+**`new[]` と `delete[]`** で **配列をまとめて確保 / 解放** します。
+角括弧を忘れると即不合格なので注意。
 
 ---
 
