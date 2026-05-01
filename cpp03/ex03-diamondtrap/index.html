@@ -1,0 +1,4042 @@
+
+<!doctype html>
+<html lang="ja" class="no-js">
+  <head>
+    
+      <meta charset="utf-8">
+      <meta name="viewport" content="width=device-width,initial-scale=1">
+      
+        <meta name="description" content="C経験者のための 42 CPP Modules (cpp00-04) 完全解説">
+      
+      
+      
+        <link rel="canonical" href="https://tsunanko.github.io/cpp-modules-guide/cpp03/ex03-diamondtrap/">
+      
+      
+        <link rel="prev" href="../ex02-fragtrap/">
+      
+      
+        <link rel="next" href="../eval/">
+      
+      
+        
+      
+      
+      <link rel="icon" href="../../assets/images/favicon.png">
+      <meta name="generator" content="mkdocs-1.6.1, mkdocs-material-9.7.6">
+    
+    
+      
+        <title>ex03 DiamondTrap - 42 CPP Modules Guide</title>
+      
+    
+    
+      <link rel="stylesheet" href="../../assets/stylesheets/main.484c7ddc.min.css">
+      
+        
+        <link rel="stylesheet" href="../../assets/stylesheets/palette.ab4e12ef.min.css">
+      
+      
+
+
+    
+    
+      
+    
+    
+      
+        
+        
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+        <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Noto+Sans+JP:300,300i,400,400i,700,700i%7CJetBrains+Mono:400,400i,700,700i&display=fallback">
+        <style>:root{--md-text-font:"Noto Sans JP";--md-code-font:"JetBrains Mono"}</style>
+      
+    
+    
+      <link rel="stylesheet" href="../../stylesheets/extra.css">
+    
+    <script>__md_scope=new URL("../..",location),__md_hash=e=>[...e].reduce(((e,_)=>(e<<5)-e+_.charCodeAt(0)),0),__md_get=(e,_=localStorage,t=__md_scope)=>JSON.parse(_.getItem(t.pathname+"."+e)),__md_set=(e,_,t=localStorage,a=__md_scope)=>{try{t.setItem(a.pathname+"."+e,JSON.stringify(_))}catch(e){}}</script>
+    
+      
+
+    
+    
+  </head>
+  
+  
+    
+    
+      
+    
+    
+    
+    
+    <body dir="ltr" data-md-color-scheme="default" data-md-color-primary="indigo" data-md-color-accent="indigo">
+  
+    
+    <input class="md-toggle" data-md-toggle="drawer" type="checkbox" id="__drawer" autocomplete="off">
+    <input class="md-toggle" data-md-toggle="search" type="checkbox" id="__search" autocomplete="off">
+    <label class="md-overlay" for="__drawer"></label>
+    <div data-md-component="skip">
+      
+        
+        <a href="#ex03-diamondtrap" class="md-skip">
+          コンテンツにスキップ
+        </a>
+      
+    </div>
+    <div data-md-component="announce">
+      
+    </div>
+    
+    
+      
+
+<header class="md-header" data-md-component="header">
+  <nav class="md-header__inner md-grid" aria-label="ヘッダー">
+    <a href="../.." title="42 CPP Modules Guide" class="md-header__button md-logo" aria-label="42 CPP Modules Guide" data-md-component="logo">
+      
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="m14.6 16.6 4.6-4.6-4.6-4.6L16 6l6 6-6 6zm-5.2 0L4.8 12l4.6-4.6L8 6l-6 6 6 6z"/></svg>
+
+    </a>
+    <label class="md-header__button md-icon" for="__drawer">
+      
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M3 6h18v2H3zm0 5h18v2H3zm0 5h18v2H3z"/></svg>
+    </label>
+    <div class="md-header__title" data-md-component="header-title">
+      <div class="md-header__ellipsis">
+        <div class="md-header__topic">
+          <span class="md-ellipsis">
+            42 CPP Modules Guide
+          </span>
+        </div>
+        <div class="md-header__topic" data-md-component="header-topic">
+          <span class="md-ellipsis">
+            
+              ex03 DiamondTrap
+            
+          </span>
+        </div>
+      </div>
+    </div>
+    
+      
+        <form class="md-header__option" data-md-component="palette">
+  
+    
+    
+    
+    <input class="md-option" data-md-color-media="(prefers-color-scheme: light)" data-md-color-scheme="default" data-md-color-primary="indigo" data-md-color-accent="indigo"  aria-label="ダークモードへ"  type="radio" name="__palette" id="__palette_0">
+    
+      <label class="md-header__button md-icon" title="ダークモードへ" for="__palette_1" hidden>
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 7a5 5 0 0 1 5 5 5 5 0 0 1-5 5 5 5 0 0 1-5-5 5 5 0 0 1 5-5m0 2a3 3 0 0 0-3 3 3 3 0 0 0 3 3 3 3 0 0 0 3-3 3 3 0 0 0-3-3m0-7 2.39 3.42C13.65 5.15 12.84 5 12 5s-1.65.15-2.39.42zM3.34 7l4.16-.35A7.2 7.2 0 0 0 5.94 8.5c-.44.74-.69 1.5-.83 2.29zm.02 10 1.76-3.77a7.131 7.131 0 0 0 2.38 4.14zM20.65 7l-1.77 3.79a7.02 7.02 0 0 0-2.38-4.15zm-.01 10-4.14.36c.59-.51 1.12-1.14 1.54-1.86.42-.73.69-1.5.83-2.29zM12 22l-2.41-3.44c.74.27 1.55.44 2.41.44.82 0 1.63-.17 2.37-.44z"/></svg>
+      </label>
+    
+  
+    
+    
+    
+    <input class="md-option" data-md-color-media="(prefers-color-scheme: dark)" data-md-color-scheme="slate" data-md-color-primary="indigo" data-md-color-accent="indigo"  aria-label="ライトモードへ"  type="radio" name="__palette" id="__palette_1">
+    
+      <label class="md-header__button md-icon" title="ライトモードへ" for="__palette_0" hidden>
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="m17.75 4.09-2.53 1.94.91 3.06-2.63-1.81-2.63 1.81.91-3.06-2.53-1.94L12.44 4l1.06-3 1.06 3zm3.5 6.91-1.64 1.25.59 1.98-1.7-1.17-1.7 1.17.59-1.98L15.75 11l2.06-.05L18.5 9l.69 1.95zm-2.28 4.95c.83-.08 1.72 1.1 1.19 1.85-.32.45-.66.87-1.08 1.27C15.17 23 8.84 23 4.94 19.07c-3.91-3.9-3.91-10.24 0-14.14.4-.4.82-.76 1.27-1.08.75-.53 1.93.36 1.85 1.19-.27 2.86.69 5.83 2.89 8.02a9.96 9.96 0 0 0 8.02 2.89m-1.64 2.02a12.08 12.08 0 0 1-7.8-3.47c-2.17-2.19-3.33-5-3.49-7.82-2.81 3.14-2.7 7.96.31 10.98 3.02 3.01 7.84 3.12 10.98.31"/></svg>
+      </label>
+    
+  
+</form>
+      
+    
+    
+      <script>var palette=__md_get("__palette");if(palette&&palette.color){if("(prefers-color-scheme)"===palette.color.media){var media=matchMedia("(prefers-color-scheme: light)"),input=document.querySelector(media.matches?"[data-md-color-media='(prefers-color-scheme: light)']":"[data-md-color-media='(prefers-color-scheme: dark)']");palette.color.media=input.getAttribute("data-md-color-media"),palette.color.scheme=input.getAttribute("data-md-color-scheme"),palette.color.primary=input.getAttribute("data-md-color-primary"),palette.color.accent=input.getAttribute("data-md-color-accent")}for(var[key,value]of Object.entries(palette.color))document.body.setAttribute("data-md-color-"+key,value)}</script>
+    
+    
+    
+      
+      
+        <label class="md-header__button md-icon" for="__search">
+          
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.52 6.52 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5"/></svg>
+        </label>
+        <div class="md-search" data-md-component="search" role="dialog">
+  <label class="md-search__overlay" for="__search"></label>
+  <div class="md-search__inner" role="search">
+    <form class="md-search__form" name="search">
+      <input type="text" class="md-search__input" name="query" aria-label="検索" placeholder="検索" autocapitalize="off" autocorrect="off" autocomplete="off" spellcheck="false" data-md-component="search-query" required>
+      <label class="md-search__icon md-icon" for="__search">
+        
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.52 6.52 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5"/></svg>
+        
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20 11v2H8l5.5 5.5-1.42 1.42L4.16 12l7.92-7.92L13.5 5.5 8 11z"/></svg>
+      </label>
+      <nav class="md-search__options" aria-label="検索">
+        
+          <a href="javascript:void(0)" class="md-search__icon md-icon" title="共有" aria-label="共有" data-clipboard data-clipboard-text="" data-md-component="search-share" tabindex="-1">
+            
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M18 16.08c-.76 0-1.44.3-1.96.77L8.91 12.7c.05-.23.09-.46.09-.7s-.04-.47-.09-.7l7.05-4.11c.54.5 1.25.81 2.04.81a3 3 0 0 0 3-3 3 3 0 0 0-3-3 3 3 0 0 0-3 3c0 .24.04.47.09.7L8.04 9.81C7.5 9.31 6.79 9 6 9a3 3 0 0 0-3 3 3 3 0 0 0 3 3c.79 0 1.5-.31 2.04-.81l7.12 4.15c-.05.21-.08.43-.08.66 0 1.61 1.31 2.91 2.92 2.91s2.92-1.3 2.92-2.91A2.92 2.92 0 0 0 18 16.08"/></svg>
+          </a>
+        
+        <button type="reset" class="md-search__icon md-icon" title="クリア" aria-label="クリア" tabindex="-1">
+          
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M19 6.41 17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12z"/></svg>
+        </button>
+      </nav>
+      
+        <div class="md-search__suggest" data-md-component="search-suggest"></div>
+      
+    </form>
+    <div class="md-search__output">
+      <div class="md-search__scrollwrap" tabindex="0" data-md-scrollfix>
+        <div class="md-search-result" data-md-component="search-result">
+          <div class="md-search-result__meta">
+            検索を初期化
+          </div>
+          <ol class="md-search-result__list" role="presentation"></ol>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+      
+    
+    
+  </nav>
+  
+</header>
+    
+    <div class="md-container" data-md-component="container">
+      
+      
+        
+          
+            
+<nav class="md-tabs" aria-label="タブ" data-md-component="tabs">
+  <div class="md-grid">
+    <ul class="md-tabs__list">
+      
+        
+  
+  
+  
+  
+    <li class="md-tabs__item">
+      <a href="../.." class="md-tabs__link">
+        
+  
+  
+    
+  
+  はじめに
+
+      </a>
+    </li>
+  
+
+      
+        
+  
+  
+  
+  
+    
+    
+      <li class="md-tabs__item">
+        <a href="../../intro/c-vs-cpp/" class="md-tabs__link">
+          
+  
+  
+    
+  
+  C→C++入門
+
+        </a>
+      </li>
+    
+  
+
+      
+        
+  
+  
+  
+  
+    
+    
+      <li class="md-tabs__item">
+        <a href="../../cpp00/" class="md-tabs__link">
+          
+  
+  
+    
+  
+  cpp00
+
+        </a>
+      </li>
+    
+  
+
+      
+        
+  
+  
+  
+  
+    
+    
+      <li class="md-tabs__item">
+        <a href="../../cpp01/" class="md-tabs__link">
+          
+  
+  
+    
+  
+  cpp01
+
+        </a>
+      </li>
+    
+  
+
+      
+        
+  
+  
+  
+  
+    
+    
+      <li class="md-tabs__item">
+        <a href="../../cpp02/" class="md-tabs__link">
+          
+  
+  
+    
+  
+  cpp02
+
+        </a>
+      </li>
+    
+  
+
+      
+        
+  
+  
+  
+    
+  
+  
+    
+    
+      <li class="md-tabs__item md-tabs__item--active">
+        <a href="../" class="md-tabs__link">
+          
+  
+  
+    
+  
+  cpp03
+
+        </a>
+      </li>
+    
+  
+
+      
+        
+  
+  
+  
+  
+    
+    
+      <li class="md-tabs__item">
+        <a href="../../cpp04/" class="md-tabs__link">
+          
+  
+  
+    
+  
+  cpp04
+
+        </a>
+      </li>
+    
+  
+
+      
+        
+  
+  
+  
+  
+    
+    
+      <li class="md-tabs__item">
+        <a href="../../reference/glossary/" class="md-tabs__link">
+          
+  
+  
+    
+  
+  リファレンス
+
+        </a>
+      </li>
+    
+  
+
+      
+    </ul>
+  </div>
+</nav>
+          
+        
+      
+      <main class="md-main" data-md-component="main">
+        <div class="md-main__inner md-grid">
+          
+            
+              
+              <div class="md-sidebar md-sidebar--primary" data-md-component="sidebar" data-md-type="navigation" >
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+
+
+  
+
+
+<nav class="md-nav md-nav--primary md-nav--lifted" aria-label="ナビゲーション" data-md-level="0">
+  <label class="md-nav__title" for="__drawer">
+    <a href="../.." title="42 CPP Modules Guide" class="md-nav__button md-logo" aria-label="42 CPP Modules Guide" data-md-component="logo">
+      
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="m14.6 16.6 4.6-4.6-4.6-4.6L16 6l6 6-6 6zm-5.2 0L4.8 12l4.6-4.6L8 6l-6 6 6 6z"/></svg>
+
+    </a>
+    42 CPP Modules Guide
+  </label>
+  
+  <ul class="md-nav__list" data-md-scrollfix>
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../.." class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    はじめに
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+      
+        
+      
+        
+      
+        
+      
+        
+      
+    
+    
+    
+      
+      
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_2" >
+        
+          
+          <label class="md-nav__link" for="__nav_2" id="__nav_2_label" tabindex="0">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    C→C++入門
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_2_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_2">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    C→C++入門
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../intro/c-vs-cpp/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    C vs cpp
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../intro/setup/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    開発環境
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../intro/cheatsheet/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    対応表チートシート
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../intro/defense-flow/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    ディフェンスの流れ
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+      
+        
+          
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+    
+    
+    
+      
+      
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_3" >
+        
+          
+          <div class="md-nav__link md-nav__container">
+            <a href="../../cpp00/" class="md-nav__link ">
+              
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    cpp00
+  
+
+    
+  </span>
+  
+  
+
+            </a>
+            
+              
+              <label class="md-nav__link " for="__nav_3" id="__nav_3_label" tabindex="0">
+                <span class="md-nav__icon md-icon"></span>
+              </label>
+            
+          </div>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_3_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_3">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    cpp00
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../cpp00/ex00-megaphone/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    ex00 Megaphone
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../cpp00/ex01-phonebook/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    ex01 PhoneBook
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../cpp00/ex02-account/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    ex02 Account
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../cpp00/eval/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    評価対策
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+      
+        
+          
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+    
+    
+    
+      
+      
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_4" >
+        
+          
+          <div class="md-nav__link md-nav__container">
+            <a href="../../cpp01/" class="md-nav__link ">
+              
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    cpp01
+  
+
+    
+  </span>
+  
+  
+
+            </a>
+            
+              
+              <label class="md-nav__link " for="__nav_4" id="__nav_4_label" tabindex="0">
+                <span class="md-nav__icon md-icon"></span>
+              </label>
+            
+          </div>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_4_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_4">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    cpp01
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../cpp01/ex00-zombie/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    ex00 Zombie
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../cpp01/ex01-zombie-horde/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    ex01 zombieHorde
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../cpp01/ex02-brain/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    ex02 Brain
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../cpp01/ex03-weapon/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    ex03 Weapon
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../cpp01/ex04-sed/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    ex04 Sed
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../cpp01/ex05-harl/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    ex05 Harl
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../cpp01/ex06-harl-filter/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    ex06 Harl filter
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../cpp01/eval/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    評価対策
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+      
+        
+          
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+    
+    
+    
+      
+      
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_5" >
+        
+          
+          <div class="md-nav__link md-nav__container">
+            <a href="../../cpp02/" class="md-nav__link ">
+              
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    cpp02
+  
+
+    
+  </span>
+  
+  
+
+            </a>
+            
+              
+              <label class="md-nav__link " for="__nav_5" id="__nav_5_label" tabindex="0">
+                <span class="md-nav__icon md-icon"></span>
+              </label>
+            
+          </div>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_5_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_5">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    cpp02
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../cpp02/ex00-fixed-canon/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    ex00 Fixed (OCF)
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../cpp02/ex01-fixed-constructors/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    ex01 Fixed (変換)
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../cpp02/ex02-fixed-operators/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    ex02 Fixed (演算子)
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../cpp02/ex03-bsp/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    ex03 BSP
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../cpp02/eval/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    評価対策
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+    
+  
+  
+  
+    
+    
+      
+        
+          
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+    
+    
+    
+      
+        
+        
+      
+      
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--active md-nav__item--section md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_6" checked>
+        
+          
+          <div class="md-nav__link md-nav__container">
+            <a href="../" class="md-nav__link ">
+              
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    cpp03
+  
+
+    
+  </span>
+  
+  
+
+            </a>
+            
+              
+              <label class="md-nav__link " for="__nav_6" id="__nav_6_label" tabindex="">
+                <span class="md-nav__icon md-icon"></span>
+              </label>
+            
+          </div>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_6_label" aria-expanded="true">
+          <label class="md-nav__title" for="__nav_6">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    cpp03
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../ex00-claptrap/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    ex00 ClapTrap
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../ex01-scavtrap/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    ex01 ScavTrap
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../ex02-fragtrap/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    ex02 FragTrap
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+    
+  
+  
+  
+    <li class="md-nav__item md-nav__item--active">
+      
+      <input class="md-nav__toggle md-toggle" type="checkbox" id="__toc">
+      
+      
+        
+      
+      
+        <label class="md-nav__link md-nav__link--active" for="__toc">
+          
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    ex03 DiamondTrap
+  
+
+    
+  </span>
+  
+  
+
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <a href="./" class="md-nav__link md-nav__link--active">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    ex03 DiamondTrap
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+      
+        
+
+<nav class="md-nav md-nav--secondary" aria-label="目次">
+  
+  
+  
+    
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      目次
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#_1" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        このプログラムは何？
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#1-exercise" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        1. この exercise で学ぶこと
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#2" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        2. 新しい概念の解説
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="2. 新しい概念の解説">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#_2" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        多重継承って何？
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#_3" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        ダイヤモンド問題って何？
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#virtual" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        virtual 継承って何？
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#diamondtrap-claptrap" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        なぜ DiamondTrap から ClapTrap を直接呼ぶ必要がある？
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#using-scavtrapattack" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        using ScavTrap::attack; って何？
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#claptrap_name" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        スコープ解決演算子 ClapTrap::_name って何？
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#3" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        3. 課題仕様
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="3. 課題仕様">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#diamondtrap" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        DiamondTrap クラス
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#_4" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        ステータス
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#_5" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        特殊仕様
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#4" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        4. 実行例
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#5-c-c" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        5. C と C++ の比較
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="5. C と C++ の比較">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#c" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        多重継承とダイヤモンド問題って C で言うと何？
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#virtual-c" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        virtual 継承って C で言うと何？
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#using-c" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        using 宣言って C で言うと何？
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#6" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        6. コード解説
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="6. コード解説">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#_6" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        ダイヤモンド問題のビジュアル
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#scavtraphppvirtual" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        ScavTrap.hpp（virtual 追加）
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#fragtraphppvirtual" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        FragTrap.hpp（virtual 追加）
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#diamondtraphpp" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        DiamondTrap.hpp
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#diamondtrapcpp" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        DiamondTrap.cpp（コンストラクタ）
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#diamondtrapcppwhoami" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        DiamondTrap.cpp（whoAmI）
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#_7" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        コンストラクタ呼び出し順序の詳細
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#7" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        7. 評価シートの確認項目
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#8" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        8. テストチェックリスト
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="8. テストチェックリスト">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#_8" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        構築/破棄順序
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#_9" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        ステータス
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#_10" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        メソッド
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#whoami" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        whoAmI の出力
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#ocf" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        OCF / 規約
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#9" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        9. ディフェンスで聞かれること
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#10" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        10. よくあるミス
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#11" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        11. 次のモジュールへ
+      
+    </span>
+  </a>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../eval/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    評価対策
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+      
+        
+          
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+    
+    
+    
+      
+      
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_7" >
+        
+          
+          <div class="md-nav__link md-nav__container">
+            <a href="../../cpp04/" class="md-nav__link ">
+              
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    cpp04
+  
+
+    
+  </span>
+  
+  
+
+            </a>
+            
+              
+              <label class="md-nav__link " for="__nav_7" id="__nav_7_label" tabindex="0">
+                <span class="md-nav__icon md-icon"></span>
+              </label>
+            
+          </div>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_7_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_7">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    cpp04
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../cpp04/ex00-polymorphism/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    ex00 Animal
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../cpp04/ex01-brain/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    ex01 Brain
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../cpp04/ex02-abstract/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    ex02 Abstract
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../cpp04/ex03-materia/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    ex03 Materia
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../cpp04/eval/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    評価対策
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+      
+        
+      
+        
+      
+    
+    
+    
+      
+      
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_8" >
+        
+          
+          <label class="md-nav__link" for="__nav_8" id="__nav_8_label" tabindex="0">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    リファレンス
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_8_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_8">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    リファレンス
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../reference/glossary/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    用語集
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../reference/submit-check/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    提出前チェック
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+  </ul>
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+            
+              
+              <div class="md-sidebar md-sidebar--secondary" data-md-component="sidebar" data-md-type="toc" >
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+
+<nav class="md-nav md-nav--secondary" aria-label="目次">
+  
+  
+  
+    
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      目次
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#_1" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        このプログラムは何？
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#1-exercise" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        1. この exercise で学ぶこと
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#2" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        2. 新しい概念の解説
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="2. 新しい概念の解説">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#_2" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        多重継承って何？
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#_3" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        ダイヤモンド問題って何？
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#virtual" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        virtual 継承って何？
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#diamondtrap-claptrap" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        なぜ DiamondTrap から ClapTrap を直接呼ぶ必要がある？
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#using-scavtrapattack" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        using ScavTrap::attack; って何？
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#claptrap_name" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        スコープ解決演算子 ClapTrap::_name って何？
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#3" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        3. 課題仕様
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="3. 課題仕様">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#diamondtrap" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        DiamondTrap クラス
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#_4" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        ステータス
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#_5" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        特殊仕様
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#4" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        4. 実行例
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#5-c-c" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        5. C と C++ の比較
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="5. C と C++ の比較">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#c" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        多重継承とダイヤモンド問題って C で言うと何？
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#virtual-c" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        virtual 継承って C で言うと何？
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#using-c" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        using 宣言って C で言うと何？
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#6" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        6. コード解説
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="6. コード解説">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#_6" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        ダイヤモンド問題のビジュアル
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#scavtraphppvirtual" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        ScavTrap.hpp（virtual 追加）
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#fragtraphppvirtual" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        FragTrap.hpp（virtual 追加）
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#diamondtraphpp" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        DiamondTrap.hpp
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#diamondtrapcpp" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        DiamondTrap.cpp（コンストラクタ）
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#diamondtrapcppwhoami" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        DiamondTrap.cpp（whoAmI）
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#_7" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        コンストラクタ呼び出し順序の詳細
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#7" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        7. 評価シートの確認項目
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#8" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        8. テストチェックリスト
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="8. テストチェックリスト">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#_8" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        構築/破棄順序
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#_9" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        ステータス
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#_10" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        メソッド
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#whoami" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        whoAmI の出力
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#ocf" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        OCF / 規約
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#9" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        9. ディフェンスで聞かれること
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#10" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        10. よくあるミス
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#11" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        11. 次のモジュールへ
+      
+    </span>
+  </a>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+          
+          
+            <div class="md-content" data-md-component="content">
+              
+              <article class="md-content__inner md-typeset">
+                
+                  
+
+
+
+<p><a href="../../">🏠 ホーム</a> › <a href="../">cpp03</a> › <strong>ex03 DiamondTrap</strong></p>
+<h1 id="ex03-diamondtrap">ex03 — DiamondTrap<a class="headerlink" href="#ex03-diamondtrap" title="Permanent link">&para;</a></h1>
+<hr />
+<h2 id="_1">このプログラムは何？<a class="headerlink" href="#_1" title="Permanent link">&para;</a></h2>
+<p><strong>ScavTrap と FragTrap の両方</strong> を親に持つ DiamondTrap を作るプログラム。</p>
+<p>DiamondTrap は ScavTrap の能力（警備モード）と
+FragTrap の能力（ハイタッチ）を <strong>両方</strong> 使えるスーパーロボット。</p>
+<div class="language-text highlight"><pre><span></span><code><span id="__span-0-1"><a id="__codelineno-0-1" name="__codelineno-0-1" href="#__codelineno-0-1"></a>             ClapTrap（共通の祖先）
+</span><span id="__span-0-2"><a id="__codelineno-0-2" name="__codelineno-0-2" href="#__codelineno-0-2"></a>            /        \
+</span><span id="__span-0-3"><a id="__codelineno-0-3" name="__codelineno-0-3" href="#__codelineno-0-3"></a>        ScavTrap   FragTrap    ← 両方が ClapTrap を継承
+</span><span id="__span-0-4"><a id="__codelineno-0-4" name="__codelineno-0-4" href="#__codelineno-0-4"></a>            \        /
+</span><span id="__span-0-5"><a id="__codelineno-0-5" name="__codelineno-0-5" href="#__codelineno-0-5"></a>           DiamondTrap          ← 両方を同時に継承
+</span></code></pre></div>
+<p>形がひし形（ダイヤモンド）なので <strong>ダイヤモンド継承</strong> と呼ばれます。
+ただし、単純に両方を継承すると <strong>ダイヤモンド問題</strong> という落とし穴にハマります。
+これを <strong>virtual 継承</strong> で解決するのが、この exercise の核心。</p>
+<p>これは cpp モジュール全体でもトップクラスの難所です。
+焦らずゆっくり読んでください。</p>
+<hr />
+<h2 id="1-exercise">1. この exercise で学ぶこと<a class="headerlink" href="#1-exercise" title="Permanent link">&para;</a></h2>
+<ul>
+<li><strong>多重継承</strong> — 2つ以上の親クラスを同時に継承する</li>
+<li><strong>ダイヤモンド問題</strong> — 共通の祖先が 2 つできてしまう問題</li>
+<li><strong>virtual 継承</strong> — ダイヤモンド問題を解決する C++ の仕組み</li>
+<li><strong>using 宣言</strong> — 曖昧なメソッドを明示的に選ぶ</li>
+<li><strong>スコープ解決演算子</strong> — <code>_name</code> vs <code>ClapTrap::_name</code></li>
+</ul>
+<hr />
+<h2 id="2">2. 新しい概念の解説<a class="headerlink" href="#2" title="Permanent link">&para;</a></h2>
+<h3 id="_2">多重継承って何？<a class="headerlink" href="#_2" title="Permanent link">&para;</a></h3>
+<p><strong>2つ以上の親クラスを同時に継承すること</strong>。</p>
+<div class="language-cpp highlight"><pre><span></span><code><span id="__span-1-1"><a id="__codelineno-1-1" name="__codelineno-1-1" href="#__codelineno-1-1"></a><span class="c1">// 単一継承（これまでの ex01/ex02）</span>
+</span><span id="__span-1-2"><a id="__codelineno-1-2" name="__codelineno-1-2" href="#__codelineno-1-2"></a><span class="k">class</span><span class="w"> </span><span class="nc">ScavTrap</span><span class="w"> </span><span class="o">:</span><span class="w"> </span><span class="k">public</span><span class="w"> </span><span class="n">ClapTrap</span><span class="w"> </span><span class="p">{</span><span class="w"> </span><span class="p">};</span>
+</span><span id="__span-1-3"><a id="__codelineno-1-3" name="__codelineno-1-3" href="#__codelineno-1-3"></a>
+</span><span id="__span-1-4"><a id="__codelineno-1-4" name="__codelineno-1-4" href="#__codelineno-1-4"></a><span class="c1">// 多重継承（今回の ex03）</span>
+</span><span id="__span-1-5"><a id="__codelineno-1-5" name="__codelineno-1-5" href="#__codelineno-1-5"></a><span class="k">class</span><span class="w"> </span><span class="nc">DiamondTrap</span><span class="w"> </span><span class="o">:</span>
+</span><span id="__span-1-6"><a id="__codelineno-1-6" name="__codelineno-1-6" href="#__codelineno-1-6"></a><span class="w">    </span><span class="k">public</span><span class="w"> </span><span class="n">FragTrap</span><span class="p">,</span><span class="w">    </span><span class="c1">// ← 親1つ目</span>
+</span><span id="__span-1-7"><a id="__codelineno-1-7" name="__codelineno-1-7" href="#__codelineno-1-7"></a><span class="w">    </span><span class="k">public</span><span class="w"> </span><span class="n">ScavTrap</span><span class="w">     </span><span class="c1">// ← 親2つ目</span>
+</span><span id="__span-1-8"><a id="__codelineno-1-8" name="__codelineno-1-8" href="#__codelineno-1-8"></a><span class="p">{</span>
+</span><span id="__span-1-9"><a id="__codelineno-1-9" name="__codelineno-1-9" href="#__codelineno-1-9"></a><span class="p">};</span>
+</span></code></pre></div>
+<p>カンマ <code>,</code> で区切って複数の親を指定します。
+これで DiamondTrap は FragTrap と ScavTrap の <strong>両方</strong> の機能を持ちます。</p>
+<div class="language-text highlight"><pre><span></span><code><span id="__span-2-1"><a id="__codelineno-2-1" name="__codelineno-2-1" href="#__codelineno-2-1"></a>DiamondTrap d(&quot;Diamond&quot;);
+</span><span id="__span-2-2"><a id="__codelineno-2-2" name="__codelineno-2-2" href="#__codelineno-2-2"></a>d.attack(&quot;Enemy&quot;);        // ScavTrap の機能
+</span><span id="__span-2-3"><a id="__codelineno-2-3" name="__codelineno-2-3" href="#__codelineno-2-3"></a>d.guardGate();            // ScavTrap の機能
+</span><span id="__span-2-4"><a id="__codelineno-2-4" name="__codelineno-2-4" href="#__codelineno-2-4"></a>d.highFivesGuys();        // FragTrap の機能
+</span><span id="__span-2-5"><a id="__codelineno-2-5" name="__codelineno-2-5" href="#__codelineno-2-5"></a>d.takeDamage(10);         // ClapTrap の機能（両親から継承）
+</span><span id="__span-2-6"><a id="__codelineno-2-6" name="__codelineno-2-6" href="#__codelineno-2-6"></a>d.beRepaired(5);          // ClapTrap の機能（両親から継承）
+</span></code></pre></div>
+<h3 id="_3">ダイヤモンド問題って何？<a class="headerlink" href="#_3" title="Permanent link">&para;</a></h3>
+<p><strong>2つの親が同じ親を持つと、孫の中に共通の祖先が 2 つできてしまう問題</strong>。</p>
+<p>DiamondTrap の継承関係を描くと:</p>
+<div class="language-text highlight"><pre><span></span><code><span id="__span-3-1"><a id="__codelineno-3-1" name="__codelineno-3-1" href="#__codelineno-3-1"></a>          ClapTrap         ← 共通の祖先
+</span><span id="__span-3-2"><a id="__codelineno-3-2" name="__codelineno-3-2" href="#__codelineno-3-2"></a>         /        \
+</span><span id="__span-3-3"><a id="__codelineno-3-3" name="__codelineno-3-3" href="#__codelineno-3-3"></a>     ScavTrap   FragTrap    ← どちらも ClapTrap を継承
+</span><span id="__span-3-4"><a id="__codelineno-3-4" name="__codelineno-3-4" href="#__codelineno-3-4"></a>         \        /
+</span><span id="__span-3-5"><a id="__codelineno-3-5" name="__codelineno-3-5" href="#__codelineno-3-5"></a>        DiamondTrap         ← 両方を継承
+</span></code></pre></div>
+<p>virtual なしで継承すると、DiamondTrap の中はこんな状態:</p>
+<div class="language-text highlight"><pre><span></span><code><span id="__span-4-1"><a id="__codelineno-4-1" name="__codelineno-4-1" href="#__codelineno-4-1"></a>DiamondTrap のメモリ構造（virtual なしの場合）:
+</span><span id="__span-4-2"><a id="__codelineno-4-2" name="__codelineno-4-2" href="#__codelineno-4-2"></a>
+</span><span id="__span-4-3"><a id="__codelineno-4-3" name="__codelineno-4-3" href="#__codelineno-4-3"></a>  ┌─────────────────────┐
+</span><span id="__span-4-4"><a id="__codelineno-4-4" name="__codelineno-4-4" href="#__codelineno-4-4"></a>  │ ClapTrap (1つ目)    │ ← ScavTrap 経由で入ってきた
+</span><span id="__span-4-5"><a id="__codelineno-4-5" name="__codelineno-4-5" href="#__codelineno-4-5"></a>  │  _name              │
+</span><span id="__span-4-6"><a id="__codelineno-4-6" name="__codelineno-4-6" href="#__codelineno-4-6"></a>  │  _hitPoints         │
+</span><span id="__span-4-7"><a id="__codelineno-4-7" name="__codelineno-4-7" href="#__codelineno-4-7"></a>  │  _energyPoints      │
+</span><span id="__span-4-8"><a id="__codelineno-4-8" name="__codelineno-4-8" href="#__codelineno-4-8"></a>  │  _attackDamage      │
+</span><span id="__span-4-9"><a id="__codelineno-4-9" name="__codelineno-4-9" href="#__codelineno-4-9"></a>  ├─────────────────────┤
+</span><span id="__span-4-10"><a id="__codelineno-4-10" name="__codelineno-4-10" href="#__codelineno-4-10"></a>  │ ClapTrap (2つ目)    │ ← FragTrap 経由で入ってきた
+</span><span id="__span-4-11"><a id="__codelineno-4-11" name="__codelineno-4-11" href="#__codelineno-4-11"></a>  │  _name              │    同じ変数が2個！
+</span><span id="__span-4-12"><a id="__codelineno-4-12" name="__codelineno-4-12" href="#__codelineno-4-12"></a>  │  _hitPoints         │
+</span><span id="__span-4-13"><a id="__codelineno-4-13" name="__codelineno-4-13" href="#__codelineno-4-13"></a>  │  _energyPoints      │
+</span><span id="__span-4-14"><a id="__codelineno-4-14" name="__codelineno-4-14" href="#__codelineno-4-14"></a>  │  _attackDamage      │
+</span><span id="__span-4-15"><a id="__codelineno-4-15" name="__codelineno-4-15" href="#__codelineno-4-15"></a>  └─────────────────────┘
+</span><span id="__span-4-16"><a id="__codelineno-4-16" name="__codelineno-4-16" href="#__codelineno-4-16"></a>
+</span><span id="__span-4-17"><a id="__codelineno-4-17" name="__codelineno-4-17" href="#__codelineno-4-17"></a>  → _name を読もうとすると
+</span><span id="__span-4-18"><a id="__codelineno-4-18" name="__codelineno-4-18" href="#__codelineno-4-18"></a>    「どっちの _name？」で曖昧
+</span><span id="__span-4-19"><a id="__codelineno-4-19" name="__codelineno-4-19" href="#__codelineno-4-19"></a>  → コンパイルエラー
+</span></code></pre></div>
+<p><strong>同じ <code>_name</code> が2つある</strong> ので、プログラムは「どっちを使うの？」となって
+エラーになります。これがダイヤモンド問題。</p>
+<h3 id="virtual"><code>virtual</code> 継承って何？<a class="headerlink" href="#virtual" title="Permanent link">&para;</a></h3>
+<p><strong>ダイヤモンド問題を解決する C++ の仕組み</strong>。
+親クラスの継承に <code>virtual</code> を付けると、共通の祖先を <strong>1つに統合</strong> できます。</p>
+<div class="language-cpp highlight"><pre><span></span><code><span id="__span-5-1"><a id="__codelineno-5-1" name="__codelineno-5-1" href="#__codelineno-5-1"></a><span class="c1">// ScavTrap.hpp</span>
+</span><span id="__span-5-2"><a id="__codelineno-5-2" name="__codelineno-5-2" href="#__codelineno-5-2"></a><span class="k">class</span><span class="w"> </span><span class="nc">ScavTrap</span><span class="w"> </span><span class="o">:</span><span class="w"> </span><span class="k">virtual</span><span class="w"> </span><span class="k">public</span><span class="w"> </span><span class="n">ClapTrap</span><span class="w"> </span><span class="p">{</span><span class="w"> </span><span class="p">};</span>
+</span><span id="__span-5-3"><a id="__codelineno-5-3" name="__codelineno-5-3" href="#__codelineno-5-3"></a><span class="c1">//               ^^^^^^^</span>
+</span><span id="__span-5-4"><a id="__codelineno-5-4" name="__codelineno-5-4" href="#__codelineno-5-4"></a><span class="c1">//               これを追加！</span>
+</span><span id="__span-5-5"><a id="__codelineno-5-5" name="__codelineno-5-5" href="#__codelineno-5-5"></a>
+</span><span id="__span-5-6"><a id="__codelineno-5-6" name="__codelineno-5-6" href="#__codelineno-5-6"></a><span class="c1">// FragTrap.hpp</span>
+</span><span id="__span-5-7"><a id="__codelineno-5-7" name="__codelineno-5-7" href="#__codelineno-5-7"></a><span class="k">class</span><span class="w"> </span><span class="nc">FragTrap</span><span class="w"> </span><span class="o">:</span><span class="w"> </span><span class="k">virtual</span><span class="w"> </span><span class="k">public</span><span class="w"> </span><span class="n">ClapTrap</span><span class="w"> </span><span class="p">{</span><span class="w"> </span><span class="p">};</span>
+</span><span id="__span-5-8"><a id="__codelineno-5-8" name="__codelineno-5-8" href="#__codelineno-5-8"></a><span class="c1">//               ^^^^^^^</span>
+</span><span id="__span-5-9"><a id="__codelineno-5-9" name="__codelineno-5-9" href="#__codelineno-5-9"></a><span class="c1">//               これも追加！</span>
+</span></code></pre></div>
+<p>こうすると DiamondTrap の中はこうなります:</p>
+<div class="language-text highlight"><pre><span></span><code><span id="__span-6-1"><a id="__codelineno-6-1" name="__codelineno-6-1" href="#__codelineno-6-1"></a>DiamondTrap のメモリ構造（virtual ありの場合）:
+</span><span id="__span-6-2"><a id="__codelineno-6-2" name="__codelineno-6-2" href="#__codelineno-6-2"></a>
+</span><span id="__span-6-3"><a id="__codelineno-6-3" name="__codelineno-6-3" href="#__codelineno-6-3"></a>  ┌─────────────────────┐
+</span><span id="__span-6-4"><a id="__codelineno-6-4" name="__codelineno-6-4" href="#__codelineno-6-4"></a>  │ ClapTrap（1つだけ） │ ← ScavTrap と FragTrap が共有
+</span><span id="__span-6-5"><a id="__codelineno-6-5" name="__codelineno-6-5" href="#__codelineno-6-5"></a>  │  _name              │
+</span><span id="__span-6-6"><a id="__codelineno-6-6" name="__codelineno-6-6" href="#__codelineno-6-6"></a>  │  _hitPoints         │
+</span><span id="__span-6-7"><a id="__codelineno-6-7" name="__codelineno-6-7" href="#__codelineno-6-7"></a>  │  _energyPoints      │
+</span><span id="__span-6-8"><a id="__codelineno-6-8" name="__codelineno-6-8" href="#__codelineno-6-8"></a>  │  _attackDamage      │
+</span><span id="__span-6-9"><a id="__codelineno-6-9" name="__codelineno-6-9" href="#__codelineno-6-9"></a>  └─────────────────────┘
+</span><span id="__span-6-10"><a id="__codelineno-6-10" name="__codelineno-6-10" href="#__codelineno-6-10"></a>  ┌─────────────────────┐
+</span><span id="__span-6-11"><a id="__codelineno-6-11" name="__codelineno-6-11" href="#__codelineno-6-11"></a>  │ ScavTrap 部分       │
+</span><span id="__span-6-12"><a id="__codelineno-6-12" name="__codelineno-6-12" href="#__codelineno-6-12"></a>  ├─────────────────────┤
+</span><span id="__span-6-13"><a id="__codelineno-6-13" name="__codelineno-6-13" href="#__codelineno-6-13"></a>  │ FragTrap 部分       │
+</span><span id="__span-6-14"><a id="__codelineno-6-14" name="__codelineno-6-14" href="#__codelineno-6-14"></a>  └─────────────────────┘
+</span></code></pre></div>
+<p>ClapTrap が <strong>1つだけ</strong> になったので、<code>_name</code> を読んでも曖昧にならない！</p>
+<div class="admonition warning">
+<p class="admonition-title">両方の親に virtual が必要</p>
+<p>片方だけ virtual にしても ClapTrap は 1 つに統合されません。
+ScavTrap と FragTrap の <strong>両方</strong> に virtual を付ける必要があります。</p>
+</div>
+<h3 id="diamondtrap-claptrap">なぜ DiamondTrap から ClapTrap を直接呼ぶ必要がある？<a class="headerlink" href="#diamondtrap-claptrap" title="Permanent link">&para;</a></h3>
+<p><strong>virtual 基底クラスは「最も派生したクラス」から初期化する</strong> のが C++ のルール。</p>
+<p>普通の継承なら、子のコンストラクタが親を呼べば済みます。</p>
+<div class="language-cpp highlight"><pre><span></span><code><span id="__span-7-1"><a id="__codelineno-7-1" name="__codelineno-7-1" href="#__codelineno-7-1"></a><span class="c1">// 普通の継承（virtual なし）</span>
+</span><span id="__span-7-2"><a id="__codelineno-7-2" name="__codelineno-7-2" href="#__codelineno-7-2"></a><span class="k">class</span><span class="w"> </span><span class="nc">ScavTrap</span><span class="w"> </span><span class="o">:</span><span class="w"> </span><span class="k">public</span><span class="w"> </span><span class="n">ClapTrap</span><span class="w"> </span><span class="p">{</span>
+</span><span id="__span-7-3"><a id="__codelineno-7-3" name="__codelineno-7-3" href="#__codelineno-7-3"></a><span class="k">public</span><span class="o">:</span>
+</span><span id="__span-7-4"><a id="__codelineno-7-4" name="__codelineno-7-4" href="#__codelineno-7-4"></a><span class="w">    </span><span class="n">ScavTrap</span><span class="p">(</span><span class="k">const</span><span class="w"> </span><span class="n">std</span><span class="o">::</span><span class="n">string</span><span class="o">&amp;</span><span class="w"> </span><span class="n">name</span><span class="p">)</span>
+</span><span id="__span-7-5"><a id="__codelineno-7-5" name="__codelineno-7-5" href="#__codelineno-7-5"></a><span class="w">        </span><span class="o">:</span><span class="w"> </span><span class="n">ClapTrap</span><span class="p">(</span><span class="n">name</span><span class="p">)</span><span class="w"> </span><span class="p">{}</span><span class="w">   </span><span class="c1">// ← ScavTrap が親を呼ぶ</span>
+</span><span id="__span-7-6"><a id="__codelineno-7-6" name="__codelineno-7-6" href="#__codelineno-7-6"></a><span class="p">};</span>
+</span></code></pre></div>
+<p>でも virtual 継承の場合、共通の祖先は <strong>最派生クラス（DiamondTrap）</strong> が直接初期化します。</p>
+<div class="language-cpp highlight"><pre><span></span><code><span id="__span-8-1"><a id="__codelineno-8-1" name="__codelineno-8-1" href="#__codelineno-8-1"></a><span class="c1">// virtual 継承の場合</span>
+</span><span id="__span-8-2"><a id="__codelineno-8-2" name="__codelineno-8-2" href="#__codelineno-8-2"></a><span class="c1">// ScavTrap の初期化リストの ClapTrap() は無視される！</span>
+</span><span id="__span-8-3"><a id="__codelineno-8-3" name="__codelineno-8-3" href="#__codelineno-8-3"></a><span class="c1">// DiamondTrap が直接 ClapTrap を呼ぶ</span>
+</span><span id="__span-8-4"><a id="__codelineno-8-4" name="__codelineno-8-4" href="#__codelineno-8-4"></a>
+</span><span id="__span-8-5"><a id="__codelineno-8-5" name="__codelineno-8-5" href="#__codelineno-8-5"></a><span class="n">DiamondTrap</span><span class="o">::</span><span class="n">DiamondTrap</span><span class="p">(</span><span class="k">const</span><span class="w"> </span><span class="n">std</span><span class="o">::</span><span class="n">string</span><span class="o">&amp;</span><span class="w"> </span><span class="n">name</span><span class="p">)</span>
+</span><span id="__span-8-6"><a id="__codelineno-8-6" name="__codelineno-8-6" href="#__codelineno-8-6"></a><span class="w">    </span><span class="o">:</span><span class="w"> </span><span class="n">ClapTrap</span><span class="p">(</span><span class="n">name</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="s">&quot;_clap_name&quot;</span><span class="p">),</span><span class="w">   </span><span class="c1">// ← 最派生が直接！</span>
+</span><span id="__span-8-7"><a id="__codelineno-8-7" name="__codelineno-8-7" href="#__codelineno-8-7"></a><span class="w">      </span><span class="n">FragTrap</span><span class="p">(</span><span class="n">name</span><span class="p">),</span>
+</span><span id="__span-8-8"><a id="__codelineno-8-8" name="__codelineno-8-8" href="#__codelineno-8-8"></a><span class="w">      </span><span class="n">ScavTrap</span><span class="p">(</span><span class="n">name</span><span class="p">),</span>
+</span><span id="__span-8-9"><a id="__codelineno-8-9" name="__codelineno-8-9" href="#__codelineno-8-9"></a><span class="w">      </span><span class="n">_name</span><span class="p">(</span><span class="n">name</span><span class="p">)</span>
+</span><span id="__span-8-10"><a id="__codelineno-8-10" name="__codelineno-8-10" href="#__codelineno-8-10"></a><span class="p">{</span>
+</span><span id="__span-8-11"><a id="__codelineno-8-11" name="__codelineno-8-11" href="#__codelineno-8-11"></a><span class="w">    </span><span class="c1">// ...</span>
+</span><span id="__span-8-12"><a id="__codelineno-8-12" name="__codelineno-8-12" href="#__codelineno-8-12"></a><span class="p">}</span>
+</span></code></pre></div>
+<p><strong>なぜ？</strong> → 共通の祖先（ClapTrap）は1つだけ。
+ScavTrap と FragTrap のどっちが ClapTrap を初期化すべきか曖昧になるので、
+一番下の DiamondTrap が責任を持って初期化する、というルール。</p>
+<h3 id="using-scavtrapattack"><code>using ScavTrap::attack;</code> って何？<a class="headerlink" href="#using-scavtrapattack" title="Permanent link">&para;</a></h3>
+<p><strong>曖昧な候補の中から1つを選ぶ宣言</strong>。</p>
+<p>DiamondTrap は ScavTrap と FragTrap 経由で attack を継承しています。
+ScavTrap::attack と、FragTrap 経由の ClapTrap::attack がある状態。</p>
+<div class="language-text highlight"><pre><span></span><code><span id="__span-9-1"><a id="__codelineno-9-1" name="__codelineno-9-1" href="#__codelineno-9-1"></a>DiamondTrap が持つ attack の候補:
+</span><span id="__span-9-2"><a id="__codelineno-9-2" name="__codelineno-9-2" href="#__codelineno-9-2"></a>  - ScavTrap::attack（ScavTrap がオーバーライドした版）
+</span><span id="__span-9-3"><a id="__codelineno-9-3" name="__codelineno-9-3" href="#__codelineno-9-3"></a>  - ClapTrap::attack（FragTrap はオーバーライドしないので親のまま）
+</span></code></pre></div>
+<p>どれを使うか指定しないとコンパイラは「どっちの attack？」となって曖昧エラー。</p>
+<div class="language-cpp highlight"><pre><span></span><code><span id="__span-10-1"><a id="__codelineno-10-1" name="__codelineno-10-1" href="#__codelineno-10-1"></a><span class="k">class</span><span class="w"> </span><span class="nc">DiamondTrap</span><span class="w"> </span><span class="o">:</span>
+</span><span id="__span-10-2"><a id="__codelineno-10-2" name="__codelineno-10-2" href="#__codelineno-10-2"></a><span class="w">    </span><span class="k">public</span><span class="w"> </span><span class="n">FragTrap</span><span class="p">,</span><span class="w"> </span><span class="k">public</span><span class="w"> </span><span class="n">ScavTrap</span>
+</span><span id="__span-10-3"><a id="__codelineno-10-3" name="__codelineno-10-3" href="#__codelineno-10-3"></a><span class="p">{</span>
+</span><span id="__span-10-4"><a id="__codelineno-10-4" name="__codelineno-10-4" href="#__codelineno-10-4"></a><span class="k">public</span><span class="o">:</span>
+</span><span id="__span-10-5"><a id="__codelineno-10-5" name="__codelineno-10-5" href="#__codelineno-10-5"></a><span class="w">    </span><span class="c1">// ScavTrap 版の attack を使うと宣言</span>
+</span><span id="__span-10-6"><a id="__codelineno-10-6" name="__codelineno-10-6" href="#__codelineno-10-6"></a><span class="w">    </span><span class="k">using</span><span class="w"> </span><span class="n">ScavTrap</span><span class="o">::</span><span class="n">attack</span><span class="p">;</span><span class="w">   </span><span class="c1">// ← これ！</span>
+</span><span id="__span-10-7"><a id="__codelineno-10-7" name="__codelineno-10-7" href="#__codelineno-10-7"></a><span class="p">};</span>
+</span></code></pre></div>
+<p>これで <code>diamond.attack("Enemy")</code> は <strong>ScavTrap の attack</strong> が呼ばれるようになります。</p>
+<h3 id="claptrap_name">スコープ解決演算子 <code>ClapTrap::_name</code> って何？<a class="headerlink" href="#claptrap_name" title="Permanent link">&para;</a></h3>
+<p><strong>「どのクラスの <code>_name</code> か」を明示的に指定する書き方</strong>。</p>
+<p>DiamondTrap には同じ名前のメンバが2つあります:</p>
+<div class="language-cpp highlight"><pre><span></span><code><span id="__span-11-1"><a id="__codelineno-11-1" name="__codelineno-11-1" href="#__codelineno-11-1"></a><span class="k">class</span><span class="w"> </span><span class="nc">DiamondTrap</span><span class="w"> </span><span class="o">:</span><span class="w"> </span><span class="k">public</span><span class="w"> </span><span class="n">FragTrap</span><span class="p">,</span><span class="w"> </span><span class="k">public</span><span class="w"> </span><span class="n">ScavTrap</span><span class="w"> </span><span class="p">{</span>
+</span><span id="__span-11-2"><a id="__codelineno-11-2" name="__codelineno-11-2" href="#__codelineno-11-2"></a><span class="k">private</span><span class="o">:</span>
+</span><span id="__span-11-3"><a id="__codelineno-11-3" name="__codelineno-11-3" href="#__codelineno-11-3"></a><span class="w">    </span><span class="n">std</span><span class="o">::</span><span class="n">string</span><span class="w"> </span><span class="n">_name</span><span class="p">;</span><span class="w">   </span><span class="c1">// DiamondTrap 独自の _name</span>
+</span><span id="__span-11-4"><a id="__codelineno-11-4" name="__codelineno-11-4" href="#__codelineno-11-4"></a><span class="w">    </span><span class="c1">// ClapTrap からも _name を継承している</span>
+</span><span id="__span-11-5"><a id="__codelineno-11-5" name="__codelineno-11-5" href="#__codelineno-11-5"></a><span class="p">};</span>
+</span></code></pre></div>
+<div class="language-cpp highlight"><pre><span></span><code><span id="__span-12-1"><a id="__codelineno-12-1" name="__codelineno-12-1" href="#__codelineno-12-1"></a><span class="n">_name</span><span class="w">            </span><span class="err">→</span><span class="w"> </span><span class="n">DiamondTrap</span><span class="o">::</span><span class="n">_name</span><span class="err">（</span><span class="n">近いスコープが優先</span><span class="err">）</span>
+</span><span id="__span-12-2"><a id="__codelineno-12-2" name="__codelineno-12-2" href="#__codelineno-12-2"></a><span class="n">ClapTrap</span><span class="o">::</span><span class="n">_name</span><span class="w">  </span><span class="err">→</span><span class="w"> </span><span class="n">親</span><span class="w"> </span><span class="n">ClapTrap</span><span class="w"> </span><span class="n">の</span><span class="w"> </span><span class="n">_name</span><span class="err">（</span><span class="n">スコープ解決で明示</span><span class="err">）</span>
+</span></code></pre></div>
+<p>同じ名前だけどスコープが違うので、<strong>共存できます</strong>。
+<code>whoAmI()</code> ではこの2つを両方表示します。</p>
+<div class="language-cpp highlight"><pre><span></span><code><span id="__span-13-1"><a id="__codelineno-13-1" name="__codelineno-13-1" href="#__codelineno-13-1"></a><span class="kt">void</span><span class="w"> </span><span class="nf">DiamondTrap::whoAmI</span><span class="p">(</span><span class="kt">void</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+</span><span id="__span-13-2"><a id="__codelineno-13-2" name="__codelineno-13-2" href="#__codelineno-13-2"></a><span class="w">    </span><span class="n">std</span><span class="o">::</span><span class="n">cout</span><span class="w"> </span><span class="o">&lt;&lt;</span><span class="w"> </span><span class="s">&quot;I am DiamondTrap &quot;</span><span class="w"> </span><span class="o">&lt;&lt;</span><span class="w"> </span><span class="n">_name</span>
+</span><span id="__span-13-3"><a id="__codelineno-13-3" name="__codelineno-13-3" href="#__codelineno-13-3"></a><span class="w">        </span><span class="c1">// ↑ DiamondTrap::_name（自分の名前）</span>
+</span><span id="__span-13-4"><a id="__codelineno-13-4" name="__codelineno-13-4" href="#__codelineno-13-4"></a><span class="w">        </span><span class="o">&lt;&lt;</span><span class="w"> </span><span class="s">&quot; and my ClapTrap name is &quot;</span>
+</span><span id="__span-13-5"><a id="__codelineno-13-5" name="__codelineno-13-5" href="#__codelineno-13-5"></a><span class="w">        </span><span class="o">&lt;&lt;</span><span class="w"> </span><span class="n">ClapTrap</span><span class="o">::</span><span class="n">_name</span><span class="w"> </span><span class="o">&lt;&lt;</span><span class="w"> </span><span class="n">std</span><span class="o">::</span><span class="n">endl</span><span class="p">;</span>
+</span><span id="__span-13-6"><a id="__codelineno-13-6" name="__codelineno-13-6" href="#__codelineno-13-6"></a><span class="w">        </span><span class="c1">// ↑ ClapTrap::_name（親の名前）</span>
+</span><span id="__span-13-7"><a id="__codelineno-13-7" name="__codelineno-13-7" href="#__codelineno-13-7"></a><span class="p">}</span>
+</span></code></pre></div>
+<hr />
+<h2 id="3">3. 課題仕様<a class="headerlink" href="#3" title="Permanent link">&para;</a></h2>
+<h3 id="diamondtrap">DiamondTrap クラス<a class="headerlink" href="#diamondtrap" title="Permanent link">&para;</a></h3>
+<ul>
+<li><strong><code>FragTrap</code> と <code>ScavTrap</code> を public 継承</strong>（多重継承）</li>
+<li>ScavTrap と FragTrap を <code>virtual public ClapTrap</code> に変更</li>
+</ul>
+<h3 id="_4">ステータス<a class="headerlink" href="#_4" title="Permanent link">&para;</a></h3>
+<table>
+<thead>
+<tr>
+<th>属性</th>
+<th>値の出所</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>_hitPoints</code></td>
+<td><strong>FragTrap</strong> (100)</td>
+</tr>
+<tr>
+<td><code>_energyPoints</code></td>
+<td><strong>ScavTrap</strong> (50)</td>
+</tr>
+<tr>
+<td><code>_attackDamage</code></td>
+<td><strong>FragTrap</strong> (30)</td>
+</tr>
+</tbody>
+</table>
+<h3 id="_5">特殊仕様<a class="headerlink" href="#_5" title="Permanent link">&para;</a></h3>
+<ul>
+<li><strong>DiamondTrap 独自の <code>_name</code></strong> を持つ（ClapTrap::_name とは別の変数）</li>
+<li>ClapTrap::_name は <code>&lt;name&gt;_clap_name</code> に設定（例: "Diamond_clap_name"）</li>
+<li><strong><code>using ScavTrap::attack;</code></strong> で ScavTrap の attack を使用</li>
+<li><strong><code>whoAmI()</code></strong> — DiamondTrap::_name と ClapTrap::_name の両方を表示</li>
+<li>コンストラクタ/デストラクタで DiamondTrap 固有のメッセージを出力</li>
+<li>OCF を全て実装</li>
+</ul>
+<hr />
+<h2 id="4">4. 実行例<a class="headerlink" href="#4" title="Permanent link">&para;</a></h2>
+<div class="language-console highlight"><pre><span></span><code><span id="__span-14-1"><a id="__codelineno-14-1" name="__codelineno-14-1" href="#__codelineno-14-1"></a><span class="gp">$ </span>./DiamondTrap
+</span><span id="__span-14-2"><a id="__codelineno-14-2" name="__codelineno-14-2" href="#__codelineno-14-2"></a><span class="go">=== Creating DiamondTrap ===</span>
+</span><span id="__span-14-3"><a id="__codelineno-14-3" name="__codelineno-14-3" href="#__codelineno-14-3"></a><span class="go">ClapTrap constructor called for Diamond_clap_name    ← (1) virtual 基底が最初</span>
+</span><span id="__span-14-4"><a id="__codelineno-14-4" name="__codelineno-14-4" href="#__codelineno-14-4"></a><span class="go">FragTrap constructor called for Diamond              ← (2) 宣言順: FragTrap が先</span>
+</span><span id="__span-14-5"><a id="__codelineno-14-5" name="__codelineno-14-5" href="#__codelineno-14-5"></a><span class="go">ScavTrap constructor called for Diamond              ← (3) 宣言順: ScavTrap が次</span>
+</span><span id="__span-14-6"><a id="__codelineno-14-6" name="__codelineno-14-6" href="#__codelineno-14-6"></a><span class="go">DiamondTrap constructor called for Diamond           ← (4) 自分自身が最後</span>
+</span><span id="__span-14-7"><a id="__codelineno-14-7" name="__codelineno-14-7" href="#__codelineno-14-7"></a>
+</span><span id="__span-14-8"><a id="__codelineno-14-8" name="__codelineno-14-8" href="#__codelineno-14-8"></a><span class="go">=== DiamondTrap actions ===</span>
+</span><span id="__span-14-9"><a id="__codelineno-14-9" name="__codelineno-14-9" href="#__codelineno-14-9"></a><span class="go">ScavTrap Diamond attacks Enemy, causing 30 points of damage!</span>
+</span><span id="__span-14-10"><a id="__codelineno-14-10" name="__codelineno-14-10" href="#__codelineno-14-10"></a><span class="go">ClapTrap Diamond_clap_name takes 25 points of damage! HP: 75</span>
+</span><span id="__span-14-11"><a id="__codelineno-14-11" name="__codelineno-14-11" href="#__codelineno-14-11"></a><span class="go">ClapTrap Diamond_clap_name repairs itself for 10 hit points! HP: 85</span>
+</span><span id="__span-14-12"><a id="__codelineno-14-12" name="__codelineno-14-12" href="#__codelineno-14-12"></a>
+</span><span id="__span-14-13"><a id="__codelineno-14-13" name="__codelineno-14-13" href="#__codelineno-14-13"></a><span class="go">=== Special abilities ===</span>
+</span><span id="__span-14-14"><a id="__codelineno-14-14" name="__codelineno-14-14" href="#__codelineno-14-14"></a><span class="go">ScavTrap Diamond is now in Gate keeper mode.</span>
+</span><span id="__span-14-15"><a id="__codelineno-14-15" name="__codelineno-14-15" href="#__codelineno-14-15"></a><span class="go">FragTrap Diamond requests a positive high five!</span>
+</span><span id="__span-14-16"><a id="__codelineno-14-16" name="__codelineno-14-16" href="#__codelineno-14-16"></a><span class="go">I am DiamondTrap Diamond and my ClapTrap name is Diamond_clap_name</span>
+</span><span id="__span-14-17"><a id="__codelineno-14-17" name="__codelineno-14-17" href="#__codelineno-14-17"></a>
+</span><span id="__span-14-18"><a id="__codelineno-14-18" name="__codelineno-14-18" href="#__codelineno-14-18"></a><span class="go">=== Destruction ===</span>
+</span><span id="__span-14-19"><a id="__codelineno-14-19" name="__codelineno-14-19" href="#__codelineno-14-19"></a><span class="go">DiamondTrap destructor called for Diamond            ← (4) 自分自身が最初</span>
+</span><span id="__span-14-20"><a id="__codelineno-14-20" name="__codelineno-14-20" href="#__codelineno-14-20"></a><span class="go">ScavTrap destructor called for Diamond               ← (3) 構築の逆順</span>
+</span><span id="__span-14-21"><a id="__codelineno-14-21" name="__codelineno-14-21" href="#__codelineno-14-21"></a><span class="go">FragTrap destructor called for Diamond               ← (2)</span>
+</span><span id="__span-14-22"><a id="__codelineno-14-22" name="__codelineno-14-22" href="#__codelineno-14-22"></a><span class="go">ClapTrap destructor called for Diamond_clap_name     ← (1) virtual 基底が最後</span>
+</span></code></pre></div>
+<p><strong>注目ポイント</strong>:</p>
+<ul>
+<li><strong>構築順</strong>: ClapTrap → FragTrap → ScavTrap → DiamondTrap
+  （virtual 基底 → 宣言順 → 自身）</li>
+<li><strong>破棄順</strong>: DiamondTrap → ScavTrap → FragTrap → ClapTrap
+  （構築の完全な逆順）</li>
+<li>attack で "ScavTrap" と表示される（using 宣言の効果）</li>
+<li>whoAmI で 2 つの異なる名前が表示される</li>
+<li>takeDamage/beRepaired は "ClapTrap Diamond_clap_name" と表示（ClapTrap::_name を使う）</li>
+</ul>
+<hr />
+<h2 id="5-c-c">5. C と C++ の比較<a class="headerlink" href="#5-c-c" title="Permanent link">&para;</a></h2>
+<p>C言語には <strong>多重継承に相当する機能がない</strong>。
+C で無理に再現しようとすると:</p>
+<h3 id="c">多重継承とダイヤモンド問題って C で言うと何？<a class="headerlink" href="#c" title="Permanent link">&para;</a></h3>
+<p><strong>C で 2 つの親構造体を両方埋め込むと、共通の祖先が
+2 つになってしまう問題</strong> です。</p>
+<p>C では解決できないので、<strong>「1 つの場所にだけ親を埋め込む」
+独自ルール</strong> を手動で守るか、別の設計にするしかありません。</p>
+<p>C++ の <code>virtual</code> 継承は <strong>コンパイラが自動で統合してくれる</strong>
+仕組みです。</p>
+<div class="tabbed-set tabbed-alternate" data-tabs="1:2"><input checked="checked" id="__tabbed_1_1" name="__tabbed_1" type="radio" /><input id="__tabbed_1_2" name="__tabbed_1" type="radio" /><div class="tabbed-labels"><label for="__tabbed_1_1">C で擬似多重継承 (問題発生)</label><label for="__tabbed_1_2">C++ の virtual 継承 (解決)</label></div>
+<div class="tabbed-content">
+<div class="tabbed-block">
+<div class="language-c highlight"><pre><span></span><code><span id="__span-15-1"><a id="__codelineno-15-1" name="__codelineno-15-1" href="#__codelineno-15-1"></a><span class="cm">/* 共通の祖先 */</span>
+</span><span id="__span-15-2"><a id="__codelineno-15-2" name="__codelineno-15-2" href="#__codelineno-15-2"></a><span class="k">typedef</span><span class="w"> </span><span class="k">struct</span><span class="w"> </span><span class="nc">s_clap</span><span class="w"> </span><span class="p">{</span>
+</span><span id="__span-15-3"><a id="__codelineno-15-3" name="__codelineno-15-3" href="#__codelineno-15-3"></a><span class="w">    </span><span class="kt">char</span><span class="w"> </span><span class="n">name</span><span class="p">[</span><span class="mi">50</span><span class="p">];</span>
+</span><span id="__span-15-4"><a id="__codelineno-15-4" name="__codelineno-15-4" href="#__codelineno-15-4"></a><span class="w">    </span><span class="kt">unsigned</span><span class="w"> </span><span class="kt">int</span><span class="w"> </span><span class="n">hp</span><span class="p">;</span>
+</span><span id="__span-15-5"><a id="__codelineno-15-5" name="__codelineno-15-5" href="#__codelineno-15-5"></a><span class="p">}</span><span class="w"> </span><span class="n">t_clap</span><span class="p">;</span>
+</span><span id="__span-15-6"><a id="__codelineno-15-6" name="__codelineno-15-6" href="#__codelineno-15-6"></a>
+</span><span id="__span-15-7"><a id="__codelineno-15-7" name="__codelineno-15-7" href="#__codelineno-15-7"></a><span class="cm">/* 子1: ScavTrap は ClapTrap を埋め込む */</span>
+</span><span id="__span-15-8"><a id="__codelineno-15-8" name="__codelineno-15-8" href="#__codelineno-15-8"></a><span class="k">typedef</span><span class="w"> </span><span class="k">struct</span><span class="w"> </span><span class="nc">s_scav</span><span class="w"> </span><span class="p">{</span>
+</span><span id="__span-15-9"><a id="__codelineno-15-9" name="__codelineno-15-9" href="#__codelineno-15-9"></a><span class="w">    </span><span class="n">t_clap</span><span class="w"> </span><span class="n">parent</span><span class="p">;</span><span class="w">  </span><span class="cm">/* ← ClapTrap その1 */</span>
+</span><span id="__span-15-10"><a id="__codelineno-15-10" name="__codelineno-15-10" href="#__codelineno-15-10"></a><span class="p">}</span><span class="w"> </span><span class="n">t_scav</span><span class="p">;</span>
+</span><span id="__span-15-11"><a id="__codelineno-15-11" name="__codelineno-15-11" href="#__codelineno-15-11"></a>
+</span><span id="__span-15-12"><a id="__codelineno-15-12" name="__codelineno-15-12" href="#__codelineno-15-12"></a><span class="cm">/* 子2: FragTrap も ClapTrap を埋め込む */</span>
+</span><span id="__span-15-13"><a id="__codelineno-15-13" name="__codelineno-15-13" href="#__codelineno-15-13"></a><span class="k">typedef</span><span class="w"> </span><span class="k">struct</span><span class="w"> </span><span class="nc">s_frag</span><span class="w"> </span><span class="p">{</span>
+</span><span id="__span-15-14"><a id="__codelineno-15-14" name="__codelineno-15-14" href="#__codelineno-15-14"></a><span class="w">    </span><span class="n">t_clap</span><span class="w"> </span><span class="n">parent</span><span class="p">;</span><span class="w">  </span><span class="cm">/* ← ClapTrap その2 */</span>
+</span><span id="__span-15-15"><a id="__codelineno-15-15" name="__codelineno-15-15" href="#__codelineno-15-15"></a><span class="p">}</span><span class="w"> </span><span class="n">t_frag</span><span class="p">;</span>
+</span><span id="__span-15-16"><a id="__codelineno-15-16" name="__codelineno-15-16" href="#__codelineno-15-16"></a>
+</span><span id="__span-15-17"><a id="__codelineno-15-17" name="__codelineno-15-17" href="#__codelineno-15-17"></a><span class="cm">/* ── 孫: DiamondTrap (2 つの親を埋め込む) ── */</span>
+</span><span id="__span-15-18"><a id="__codelineno-15-18" name="__codelineno-15-18" href="#__codelineno-15-18"></a><span class="k">typedef</span><span class="w"> </span><span class="k">struct</span><span class="w"> </span><span class="nc">s_diamond</span><span class="w"> </span><span class="p">{</span>
+</span><span id="__span-15-19"><a id="__codelineno-15-19" name="__codelineno-15-19" href="#__codelineno-15-19"></a><span class="w">    </span><span class="cm">/* ScavTrap 部分 (中に ClapTrap を含む) */</span>
+</span><span id="__span-15-20"><a id="__codelineno-15-20" name="__codelineno-15-20" href="#__codelineno-15-20"></a><span class="w">    </span><span class="n">t_scav</span><span class="w"> </span><span class="n">scav</span><span class="p">;</span>
+</span><span id="__span-15-21"><a id="__codelineno-15-21" name="__codelineno-15-21" href="#__codelineno-15-21"></a><span class="w">    </span><span class="cm">/* FragTrap 部分 (中にも ClapTrap を含む) */</span>
+</span><span id="__span-15-22"><a id="__codelineno-15-22" name="__codelineno-15-22" href="#__codelineno-15-22"></a><span class="w">    </span><span class="n">t_frag</span><span class="w"> </span><span class="n">frag</span><span class="p">;</span>
+</span><span id="__span-15-23"><a id="__codelineno-15-23" name="__codelineno-15-23" href="#__codelineno-15-23"></a><span class="p">}</span><span class="w"> </span><span class="n">t_diamond</span><span class="p">;</span>
+</span><span id="__span-15-24"><a id="__codelineno-15-24" name="__codelineno-15-24" href="#__codelineno-15-24"></a>
+</span><span id="__span-15-25"><a id="__codelineno-15-25" name="__codelineno-15-25" href="#__codelineno-15-25"></a><span class="cm">/* 問題: ClapTrap が 2 回登場する！ */</span>
+</span><span id="__span-15-26"><a id="__codelineno-15-26" name="__codelineno-15-26" href="#__codelineno-15-26"></a><span class="cm">/* d.scav.parent.name と d.frag.parent.name で */</span>
+</span><span id="__span-15-27"><a id="__codelineno-15-27" name="__codelineno-15-27" href="#__codelineno-15-27"></a><span class="cm">/* 名前が 2 つ、HP も 2 つ存在してしまう */</span>
+</span><span id="__span-15-28"><a id="__codelineno-15-28" name="__codelineno-15-28" href="#__codelineno-15-28"></a><span class="cm">/* → どちらを使うかを毎回決めないといけない */</span>
+</span><span id="__span-15-29"><a id="__codelineno-15-29" name="__codelineno-15-29" href="#__codelineno-15-29"></a><span class="cm">/* → 同期漏れで不整合バグが起きる */</span>
+</span></code></pre></div>
+</div>
+<div class="tabbed-block">
+<div class="language-cpp highlight"><pre><span></span><code><span id="__span-16-1"><a id="__codelineno-16-1" name="__codelineno-16-1" href="#__codelineno-16-1"></a><span class="c1">// ── 子1: virtual 付きで継承 ──</span>
+</span><span id="__span-16-2"><a id="__codelineno-16-2" name="__codelineno-16-2" href="#__codelineno-16-2"></a><span class="c1">// virtual = ClapTrap を「共有する意思」を宣言</span>
+</span><span id="__span-16-3"><a id="__codelineno-16-3" name="__codelineno-16-3" href="#__codelineno-16-3"></a><span class="k">class</span><span class="w"> </span><span class="nc">ScavTrap</span><span class="w"> </span><span class="o">:</span>
+</span><span id="__span-16-4"><a id="__codelineno-16-4" name="__codelineno-16-4" href="#__codelineno-16-4"></a><span class="w">    </span><span class="k">virtual</span><span class="w"> </span><span class="k">public</span><span class="w"> </span><span class="n">ClapTrap</span><span class="w"> </span><span class="p">{</span><span class="w"> </span><span class="p">};</span>
+</span><span id="__span-16-5"><a id="__codelineno-16-5" name="__codelineno-16-5" href="#__codelineno-16-5"></a>
+</span><span id="__span-16-6"><a id="__codelineno-16-6" name="__codelineno-16-6" href="#__codelineno-16-6"></a><span class="c1">// ── 子2: 同じく virtual 付き ──</span>
+</span><span id="__span-16-7"><a id="__codelineno-16-7" name="__codelineno-16-7" href="#__codelineno-16-7"></a><span class="c1">// 両方に virtual が必要 (片方だけではダメ)</span>
+</span><span id="__span-16-8"><a id="__codelineno-16-8" name="__codelineno-16-8" href="#__codelineno-16-8"></a><span class="k">class</span><span class="w"> </span><span class="nc">FragTrap</span><span class="w"> </span><span class="o">:</span>
+</span><span id="__span-16-9"><a id="__codelineno-16-9" name="__codelineno-16-9" href="#__codelineno-16-9"></a><span class="w">    </span><span class="k">virtual</span><span class="w"> </span><span class="k">public</span><span class="w"> </span><span class="n">ClapTrap</span><span class="w"> </span><span class="p">{</span><span class="w"> </span><span class="p">};</span>
+</span><span id="__span-16-10"><a id="__codelineno-16-10" name="__codelineno-16-10" href="#__codelineno-16-10"></a>
+</span><span id="__span-16-11"><a id="__codelineno-16-11" name="__codelineno-16-11" href="#__codelineno-16-11"></a><span class="c1">// ── 孫: 多重継承 ──</span>
+</span><span id="__span-16-12"><a id="__codelineno-16-12" name="__codelineno-16-12" href="#__codelineno-16-12"></a><span class="c1">// カンマ区切りで 2 つの親を指定</span>
+</span><span id="__span-16-13"><a id="__codelineno-16-13" name="__codelineno-16-13" href="#__codelineno-16-13"></a><span class="k">class</span><span class="w"> </span><span class="nc">DiamondTrap</span><span class="w"> </span><span class="o">:</span>
+</span><span id="__span-16-14"><a id="__codelineno-16-14" name="__codelineno-16-14" href="#__codelineno-16-14"></a><span class="w">    </span><span class="k">public</span><span class="w"> </span><span class="n">FragTrap</span><span class="p">,</span>
+</span><span id="__span-16-15"><a id="__codelineno-16-15" name="__codelineno-16-15" href="#__codelineno-16-15"></a><span class="w">    </span><span class="k">public</span><span class="w"> </span><span class="n">ScavTrap</span>
+</span><span id="__span-16-16"><a id="__codelineno-16-16" name="__codelineno-16-16" href="#__codelineno-16-16"></a><span class="p">{</span>
+</span><span id="__span-16-17"><a id="__codelineno-16-17" name="__codelineno-16-17" href="#__codelineno-16-17"></a><span class="w">    </span><span class="c1">// ClapTrap は 1 つだけになる</span>
+</span><span id="__span-16-18"><a id="__codelineno-16-18" name="__codelineno-16-18" href="#__codelineno-16-18"></a><span class="w">    </span><span class="c1">// 曖昧さはコンパイラレベルで解決</span>
+</span><span id="__span-16-19"><a id="__codelineno-16-19" name="__codelineno-16-19" href="#__codelineno-16-19"></a><span class="w">    </span><span class="c1">// _name は 1 つしか存在しない</span>
+</span><span id="__span-16-20"><a id="__codelineno-16-20" name="__codelineno-16-20" href="#__codelineno-16-20"></a><span class="p">};</span>
+</span></code></pre></div>
+</div>
+</div>
+</div>
+<p>C++ の virtual 継承はこの「2 つの ClapTrap 問題」をコンパイラレベルで解決します。</p>
+<h3 id="virtual-c">virtual 継承って C で言うと何？<a class="headerlink" href="#virtual-c" title="Permanent link">&para;</a></h3>
+<p><strong>C で「親構造体の重複を防ぐ」ために設計を工夫する必要が
+あったものを、コンパイラが自動で統合する</strong> 仕組みです。</p>
+<div class="language-text highlight"><pre><span></span><code><span id="__span-17-1"><a id="__codelineno-17-1" name="__codelineno-17-1" href="#__codelineno-17-1"></a>C の場合:
+</span><span id="__span-17-2"><a id="__codelineno-17-2" name="__codelineno-17-2" href="#__codelineno-17-2"></a>  方法1: DiamondTrap に親を 1 つだけ埋め込む
+</span><span id="__span-17-3"><a id="__codelineno-17-3" name="__codelineno-17-3" href="#__codelineno-17-3"></a>         → 兄弟に渡す時に設計が複雑化
+</span><span id="__span-17-4"><a id="__codelineno-17-4" name="__codelineno-17-4" href="#__codelineno-17-4"></a>  方法2: ClapTrap へのポインタを共有
+</span><span id="__span-17-5"><a id="__codelineno-17-5" name="__codelineno-17-5" href="#__codelineno-17-5"></a>         → メモリ確保/解放を手動管理
+</span><span id="__span-17-6"><a id="__codelineno-17-6" name="__codelineno-17-6" href="#__codelineno-17-6"></a>  方法3: 「重複を受け入れて、使う時だけ気をつける」
+</span><span id="__span-17-7"><a id="__codelineno-17-7" name="__codelineno-17-7" href="#__codelineno-17-7"></a>         → バグの温床
+</span><span id="__span-17-8"><a id="__codelineno-17-8" name="__codelineno-17-8" href="#__codelineno-17-8"></a>
+</span><span id="__span-17-9"><a id="__codelineno-17-9" name="__codelineno-17-9" href="#__codelineno-17-9"></a>C++ の場合:
+</span><span id="__span-17-10"><a id="__codelineno-17-10" name="__codelineno-17-10" href="#__codelineno-17-10"></a>  ScavTrap : virtual public ClapTrap
+</span><span id="__span-17-11"><a id="__codelineno-17-11" name="__codelineno-17-11" href="#__codelineno-17-11"></a>  FragTrap : virtual public ClapTrap
+</span><span id="__span-17-12"><a id="__codelineno-17-12" name="__codelineno-17-12" href="#__codelineno-17-12"></a>  → コンパイラが自動で「ClapTrap は 1 つだけ」にする
+</span></code></pre></div>
+<h3 id="using-c">using 宣言って C で言うと何？<a class="headerlink" href="#using-c" title="Permanent link">&para;</a></h3>
+<p><strong>「同じ名前の関数が複数あるとき、どれを使うかを宣言」</strong>
+する仕組みです。</p>
+<p>C では同名関数を複数作れないので、この問題自体が発生しません
+(関数名を <code>scav_attack</code>, <code>frag_attack</code> のように区別する)。</p>
+<p>C++ の多重継承では、親両方が <code>attack()</code> を持っていると
+「どっちの attack?」で曖昧になるので、<code>using</code> で指定します:</p>
+<div class="language-cpp highlight"><pre><span></span><code><span id="__span-18-1"><a id="__codelineno-18-1" name="__codelineno-18-1" href="#__codelineno-18-1"></a><span class="c1">// ScavTrap も ClapTrap (FragTrap 経由) も attack を持つ</span>
+</span><span id="__span-18-2"><a id="__codelineno-18-2" name="__codelineno-18-2" href="#__codelineno-18-2"></a><span class="c1">// → どっちを使うか曖昧 → コンパイルエラー</span>
+</span><span id="__span-18-3"><a id="__codelineno-18-3" name="__codelineno-18-3" href="#__codelineno-18-3"></a>
+</span><span id="__span-18-4"><a id="__codelineno-18-4" name="__codelineno-18-4" href="#__codelineno-18-4"></a><span class="k">class</span><span class="w"> </span><span class="nc">DiamondTrap</span><span class="w"> </span><span class="o">:</span><span class="w"> </span><span class="k">public</span><span class="w"> </span><span class="n">FragTrap</span><span class="p">,</span><span class="w"> </span><span class="k">public</span><span class="w"> </span><span class="n">ScavTrap</span><span class="w"> </span><span class="p">{</span>
+</span><span id="__span-18-5"><a id="__codelineno-18-5" name="__codelineno-18-5" href="#__codelineno-18-5"></a><span class="k">public</span><span class="o">:</span>
+</span><span id="__span-18-6"><a id="__codelineno-18-6" name="__codelineno-18-6" href="#__codelineno-18-6"></a><span class="w">    </span><span class="c1">// ── ScavTrap 版の attack を採用すると宣言 ──</span>
+</span><span id="__span-18-7"><a id="__codelineno-18-7" name="__codelineno-18-7" href="#__codelineno-18-7"></a><span class="w">    </span><span class="c1">// これで diamond.attack() は ScavTrap::attack が呼ばれる</span>
+</span><span id="__span-18-8"><a id="__codelineno-18-8" name="__codelineno-18-8" href="#__codelineno-18-8"></a><span class="w">    </span><span class="k">using</span><span class="w"> </span><span class="n">ScavTrap</span><span class="o">::</span><span class="n">attack</span><span class="p">;</span>
+</span><span id="__span-18-9"><a id="__codelineno-18-9" name="__codelineno-18-9" href="#__codelineno-18-9"></a><span class="p">};</span>
+</span></code></pre></div>
+<table>
+<thead>
+<tr>
+<th>C で言うと</th>
+<th>C++ の using 宣言</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>scav_attack()</code> を呼ぶ</td>
+<td><code>using ScavTrap::attack;</code></td>
+</tr>
+<tr>
+<td>関数名で区別する文化</td>
+<td>同名でも選べる仕組み</td>
+</tr>
+</tbody>
+</table>
+<hr />
+<h2 id="6">6. コード解説<a class="headerlink" href="#6" title="Permanent link">&para;</a></h2>
+<h3 id="_6">ダイヤモンド問題のビジュアル<a class="headerlink" href="#_6" title="Permanent link">&para;</a></h3>
+<div class="language-text highlight"><pre><span></span><code><span id="__span-19-1"><a id="__codelineno-19-1" name="__codelineno-19-1" href="#__codelineno-19-1"></a>  ★ virtual 継承なしの場合（問題発生）★
+</span><span id="__span-19-2"><a id="__codelineno-19-2" name="__codelineno-19-2" href="#__codelineno-19-2"></a>
+</span><span id="__span-19-3"><a id="__codelineno-19-3" name="__codelineno-19-3" href="#__codelineno-19-3"></a>     ClapTrap(1)    ClapTrap(2)  ← ClapTrap が 2 つ！
+</span><span id="__span-19-4"><a id="__codelineno-19-4" name="__codelineno-19-4" href="#__codelineno-19-4"></a>         |               |
+</span><span id="__span-19-5"><a id="__codelineno-19-5" name="__codelineno-19-5" href="#__codelineno-19-5"></a>     ScavTrap        FragTrap
+</span><span id="__span-19-6"><a id="__codelineno-19-6" name="__codelineno-19-6" href="#__codelineno-19-6"></a>         \              /
+</span><span id="__span-19-7"><a id="__codelineno-19-7" name="__codelineno-19-7" href="#__codelineno-19-7"></a>          DiamondTrap
+</span><span id="__span-19-8"><a id="__codelineno-19-8" name="__codelineno-19-8" href="#__codelineno-19-8"></a>
+</span><span id="__span-19-9"><a id="__codelineno-19-9" name="__codelineno-19-9" href="#__codelineno-19-9"></a>  → _name が 2 つ、_hitPoints が 2 つ...
+</span><span id="__span-19-10"><a id="__codelineno-19-10" name="__codelineno-19-10" href="#__codelineno-19-10"></a>  → どちらの _name を使う？
+</span><span id="__span-19-11"><a id="__codelineno-19-11" name="__codelineno-19-11" href="#__codelineno-19-11"></a>  → コンパイルエラー（曖昧）
+</span></code></pre></div>
+<div class="language-text highlight"><pre><span></span><code><span id="__span-20-1"><a id="__codelineno-20-1" name="__codelineno-20-1" href="#__codelineno-20-1"></a>  ★ virtual 継承ありの場合（解決）★
+</span><span id="__span-20-2"><a id="__codelineno-20-2" name="__codelineno-20-2" href="#__codelineno-20-2"></a>
+</span><span id="__span-20-3"><a id="__codelineno-20-3" name="__codelineno-20-3" href="#__codelineno-20-3"></a>        ClapTrap              ← 1 つだけ（virtual 基底）
+</span><span id="__span-20-4"><a id="__codelineno-20-4" name="__codelineno-20-4" href="#__codelineno-20-4"></a>       /        \
+</span><span id="__span-20-5"><a id="__codelineno-20-5" name="__codelineno-20-5" href="#__codelineno-20-5"></a>   ScavTrap   FragTrap        ← どちらも virtual public ClapTrap
+</span><span id="__span-20-6"><a id="__codelineno-20-6" name="__codelineno-20-6" href="#__codelineno-20-6"></a>       \        /
+</span><span id="__span-20-7"><a id="__codelineno-20-7" name="__codelineno-20-7" href="#__codelineno-20-7"></a>      DiamondTrap
+</span><span id="__span-20-8"><a id="__codelineno-20-8" name="__codelineno-20-8" href="#__codelineno-20-8"></a>
+</span><span id="__span-20-9"><a id="__codelineno-20-9" name="__codelineno-20-9" href="#__codelineno-20-9"></a>  → _name は 1 つだけ
+</span><span id="__span-20-10"><a id="__codelineno-20-10" name="__codelineno-20-10" href="#__codelineno-20-10"></a>  → 曖昧さがない
+</span></code></pre></div>
+<h3 id="scavtraphppvirtual">ScavTrap.hpp（virtual 追加）<a class="headerlink" href="#scavtraphppvirtual" title="Permanent link">&para;</a></h3>
+<div class="language-cpp highlight"><table class="highlighttable"><tr><th colspan="2" class="filename"><span class="filename">ScavTrap.hpp (ex03 版)</span></th></tr><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal"><a href="#__codelineno-21-1"> 1</a></span>
+<span class="normal"><a href="#__codelineno-21-2"> 2</a></span>
+<span class="normal"><a href="#__codelineno-21-3"> 3</a></span>
+<span class="normal"><a href="#__codelineno-21-4"> 4</a></span>
+<span class="normal"><a href="#__codelineno-21-5"> 5</a></span>
+<span class="normal"><a href="#__codelineno-21-6"> 6</a></span>
+<span class="normal"><a href="#__codelineno-21-7"> 7</a></span>
+<span class="normal"><a href="#__codelineno-21-8"> 8</a></span>
+<span class="normal"><a href="#__codelineno-21-9"> 9</a></span>
+<span class="normal"><a href="#__codelineno-21-10">10</a></span>
+<span class="normal"><a href="#__codelineno-21-11">11</a></span>
+<span class="normal"><a href="#__codelineno-21-12">12</a></span>
+<span class="normal"><a href="#__codelineno-21-13">13</a></span>
+<span class="normal"><a href="#__codelineno-21-14">14</a></span>
+<span class="normal"><a href="#__codelineno-21-15">15</a></span>
+<span class="normal"><a href="#__codelineno-21-16">16</a></span>
+<span class="normal"><a href="#__codelineno-21-17">17</a></span>
+<span class="normal"><a href="#__codelineno-21-18">18</a></span>
+<span class="normal"><a href="#__codelineno-21-19">19</a></span>
+<span class="normal"><a href="#__codelineno-21-20">20</a></span>
+<span class="normal"><a href="#__codelineno-21-21">21</a></span>
+<span class="normal"><a href="#__codelineno-21-22">22</a></span>
+<span class="normal"><a href="#__codelineno-21-23">23</a></span>
+<span class="normal"><a href="#__codelineno-21-24">24</a></span>
+<span class="normal"><a href="#__codelineno-21-25">25</a></span></pre></div></td><td class="code"><div><pre><span></span><code><span id="__span-21-1"><a id="__codelineno-21-1" name="__codelineno-21-1"></a><span class="cp">#ifndef SCAVTRAP_HPP</span>
+</span><span id="__span-21-2"><a id="__codelineno-21-2" name="__codelineno-21-2"></a><span class="cp"># define SCAVTRAP_HPP</span>
+</span><span id="__span-21-3"><a id="__codelineno-21-3" name="__codelineno-21-3"></a>
+</span><span id="__span-21-4"><a id="__codelineno-21-4" name="__codelineno-21-4"></a><span class="cp">#</span><span class="w"> </span><span class="cp">include</span><span class="w"> </span><span class="cpf">&quot;ClapTrap.hpp&quot;</span>
+</span><span id="__span-21-5"><a id="__codelineno-21-5" name="__codelineno-21-5"></a>
+</span><span id="__span-21-6"><a id="__codelineno-21-6" name="__codelineno-21-6"></a><span class="c1">// ── ここが変更点 ──</span>
+</span><span id="__span-21-7"><a id="__codelineno-21-7" name="__codelineno-21-7"></a><span class="c1">// ex01: public ClapTrap</span>
+</span><span id="__span-21-8"><a id="__codelineno-21-8" name="__codelineno-21-8"></a><span class="c1">// ex03: virtual public ClapTrap</span>
+</span><span id="__span-21-9"><a id="__codelineno-21-9" name="__codelineno-21-9"></a><span class="k">class</span><span class="w"> </span><span class="nc">ScavTrap</span><span class="w"> </span><span class="o">:</span>
+</span><span id="__span-21-10"><a id="__codelineno-21-10" name="__codelineno-21-10"></a><span class="w">    </span><span class="k">virtual</span><span class="w"> </span><span class="k">public</span><span class="w"> </span><span class="n">ClapTrap</span><span class="w">          </span><span class="c1">// (1)</span>
+</span><span id="__span-21-11"><a id="__codelineno-21-11" name="__codelineno-21-11"></a><span class="p">{</span>
+</span><span id="__span-21-12"><a id="__codelineno-21-12" name="__codelineno-21-12"></a><span class="k">public</span><span class="o">:</span>
+</span><span id="__span-21-13"><a id="__codelineno-21-13" name="__codelineno-21-13"></a><span class="w">    </span><span class="n">ScavTrap</span><span class="p">(</span><span class="kt">void</span><span class="p">);</span>
+</span><span id="__span-21-14"><a id="__codelineno-21-14" name="__codelineno-21-14"></a><span class="w">    </span><span class="n">ScavTrap</span><span class="p">(</span><span class="k">const</span><span class="w"> </span><span class="n">std</span><span class="o">::</span><span class="n">string</span><span class="o">&amp;</span><span class="w"> </span><span class="n">name</span><span class="p">);</span>
+</span><span id="__span-21-15"><a id="__codelineno-21-15" name="__codelineno-21-15"></a><span class="w">    </span><span class="n">ScavTrap</span><span class="p">(</span><span class="k">const</span><span class="w"> </span><span class="n">ScavTrap</span><span class="o">&amp;</span><span class="w"> </span><span class="n">other</span><span class="p">);</span>
+</span><span id="__span-21-16"><a id="__codelineno-21-16" name="__codelineno-21-16"></a><span class="w">    </span><span class="n">ScavTrap</span><span class="o">&amp;</span><span class="w"> </span><span class="k">operator</span><span class="o">=</span><span class="p">(</span>
+</span><span id="__span-21-17"><a id="__codelineno-21-17" name="__codelineno-21-17"></a><span class="w">        </span><span class="k">const</span><span class="w"> </span><span class="n">ScavTrap</span><span class="o">&amp;</span><span class="w"> </span><span class="n">other</span><span class="p">);</span>
+</span><span id="__span-21-18"><a id="__codelineno-21-18" name="__codelineno-21-18"></a><span class="w">    </span><span class="o">~</span><span class="n">ScavTrap</span><span class="p">(</span><span class="kt">void</span><span class="p">);</span>
+</span><span id="__span-21-19"><a id="__codelineno-21-19" name="__codelineno-21-19"></a>
+</span><span id="__span-21-20"><a id="__codelineno-21-20" name="__codelineno-21-20"></a><span class="w">    </span><span class="kt">void</span><span class="w"> </span><span class="nf">attack</span><span class="p">(</span>
+</span><span id="__span-21-21"><a id="__codelineno-21-21" name="__codelineno-21-21"></a><span class="w">        </span><span class="k">const</span><span class="w"> </span><span class="n">std</span><span class="o">::</span><span class="n">string</span><span class="o">&amp;</span><span class="w"> </span><span class="n">target</span><span class="p">);</span>
+</span><span id="__span-21-22"><a id="__codelineno-21-22" name="__codelineno-21-22"></a><span class="w">    </span><span class="kt">void</span><span class="w"> </span><span class="nf">guardGate</span><span class="p">(</span><span class="kt">void</span><span class="p">);</span>
+</span><span id="__span-21-23"><a id="__codelineno-21-23" name="__codelineno-21-23"></a><span class="p">};</span>
+</span><span id="__span-21-24"><a id="__codelineno-21-24" name="__codelineno-21-24"></a>
+</span><span id="__span-21-25"><a id="__codelineno-21-25" name="__codelineno-21-25"></a><span class="cp">#endif</span>
+</span></code></pre></div></td></tr></table></div>
+<ol>
+<li><strong><code>virtual public ClapTrap</code></strong> —
+   通常の <code>public ClapTrap</code> に <code>virtual</code> を追加。
+   これにより ClapTrap が <strong>仮想基底クラス</strong> になる。</li>
+</ol>
+<h3 id="fragtraphppvirtual">FragTrap.hpp（virtual 追加）<a class="headerlink" href="#fragtraphppvirtual" title="Permanent link">&para;</a></h3>
+<div class="language-cpp highlight"><table class="highlighttable"><tr><th colspan="2" class="filename"><span class="filename">FragTrap.hpp (ex03 版)</span></th></tr><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal"><a href="#__codelineno-22-1"> 1</a></span>
+<span class="normal"><a href="#__codelineno-22-2"> 2</a></span>
+<span class="normal"><a href="#__codelineno-22-3"> 3</a></span>
+<span class="normal"><a href="#__codelineno-22-4"> 4</a></span>
+<span class="normal"><a href="#__codelineno-22-5"> 5</a></span>
+<span class="normal"><a href="#__codelineno-22-6"> 6</a></span>
+<span class="normal"><a href="#__codelineno-22-7"> 7</a></span>
+<span class="normal"><a href="#__codelineno-22-8"> 8</a></span>
+<span class="normal"><a href="#__codelineno-22-9"> 9</a></span>
+<span class="normal"><a href="#__codelineno-22-10">10</a></span>
+<span class="normal"><a href="#__codelineno-22-11">11</a></span>
+<span class="normal"><a href="#__codelineno-22-12">12</a></span>
+<span class="normal"><a href="#__codelineno-22-13">13</a></span>
+<span class="normal"><a href="#__codelineno-22-14">14</a></span>
+<span class="normal"><a href="#__codelineno-22-15">15</a></span>
+<span class="normal"><a href="#__codelineno-22-16">16</a></span>
+<span class="normal"><a href="#__codelineno-22-17">17</a></span>
+<span class="normal"><a href="#__codelineno-22-18">18</a></span>
+<span class="normal"><a href="#__codelineno-22-19">19</a></span>
+<span class="normal"><a href="#__codelineno-22-20">20</a></span>
+<span class="normal"><a href="#__codelineno-22-21">21</a></span>
+<span class="normal"><a href="#__codelineno-22-22">22</a></span>
+<span class="normal"><a href="#__codelineno-22-23">23</a></span></pre></div></td><td class="code"><div><pre><span></span><code><span id="__span-22-1"><a id="__codelineno-22-1" name="__codelineno-22-1"></a><span class="cp">#ifndef FRAGTRAP_HPP</span>
+</span><span id="__span-22-2"><a id="__codelineno-22-2" name="__codelineno-22-2"></a><span class="cp"># define FRAGTRAP_HPP</span>
+</span><span id="__span-22-3"><a id="__codelineno-22-3" name="__codelineno-22-3"></a>
+</span><span id="__span-22-4"><a id="__codelineno-22-4" name="__codelineno-22-4"></a><span class="cp">#</span><span class="w"> </span><span class="cp">include</span><span class="w"> </span><span class="cpf">&quot;ClapTrap.hpp&quot;</span>
+</span><span id="__span-22-5"><a id="__codelineno-22-5" name="__codelineno-22-5"></a>
+</span><span id="__span-22-6"><a id="__codelineno-22-6" name="__codelineno-22-6"></a><span class="c1">// ── ここが変更点 ──</span>
+</span><span id="__span-22-7"><a id="__codelineno-22-7" name="__codelineno-22-7"></a><span class="c1">// ex02: public ClapTrap</span>
+</span><span id="__span-22-8"><a id="__codelineno-22-8" name="__codelineno-22-8"></a><span class="c1">// ex03: virtual public ClapTrap</span>
+</span><span id="__span-22-9"><a id="__codelineno-22-9" name="__codelineno-22-9"></a><span class="k">class</span><span class="w"> </span><span class="nc">FragTrap</span><span class="w"> </span><span class="o">:</span>
+</span><span id="__span-22-10"><a id="__codelineno-22-10" name="__codelineno-22-10"></a><span class="w">    </span><span class="k">virtual</span><span class="w"> </span><span class="k">public</span><span class="w"> </span><span class="n">ClapTrap</span><span class="w">          </span><span class="c1">// (1)</span>
+</span><span id="__span-22-11"><a id="__codelineno-22-11" name="__codelineno-22-11"></a><span class="p">{</span>
+</span><span id="__span-22-12"><a id="__codelineno-22-12" name="__codelineno-22-12"></a><span class="k">public</span><span class="o">:</span>
+</span><span id="__span-22-13"><a id="__codelineno-22-13" name="__codelineno-22-13"></a><span class="w">    </span><span class="n">FragTrap</span><span class="p">(</span><span class="kt">void</span><span class="p">);</span>
+</span><span id="__span-22-14"><a id="__codelineno-22-14" name="__codelineno-22-14"></a><span class="w">    </span><span class="n">FragTrap</span><span class="p">(</span><span class="k">const</span><span class="w"> </span><span class="n">std</span><span class="o">::</span><span class="n">string</span><span class="o">&amp;</span><span class="w"> </span><span class="n">name</span><span class="p">);</span>
+</span><span id="__span-22-15"><a id="__codelineno-22-15" name="__codelineno-22-15"></a><span class="w">    </span><span class="n">FragTrap</span><span class="p">(</span><span class="k">const</span><span class="w"> </span><span class="n">FragTrap</span><span class="o">&amp;</span><span class="w"> </span><span class="n">other</span><span class="p">);</span>
+</span><span id="__span-22-16"><a id="__codelineno-22-16" name="__codelineno-22-16"></a><span class="w">    </span><span class="n">FragTrap</span><span class="o">&amp;</span><span class="w"> </span><span class="k">operator</span><span class="o">=</span><span class="p">(</span>
+</span><span id="__span-22-17"><a id="__codelineno-22-17" name="__codelineno-22-17"></a><span class="w">        </span><span class="k">const</span><span class="w"> </span><span class="n">FragTrap</span><span class="o">&amp;</span><span class="w"> </span><span class="n">other</span><span class="p">);</span>
+</span><span id="__span-22-18"><a id="__codelineno-22-18" name="__codelineno-22-18"></a><span class="w">    </span><span class="o">~</span><span class="n">FragTrap</span><span class="p">(</span><span class="kt">void</span><span class="p">);</span>
+</span><span id="__span-22-19"><a id="__codelineno-22-19" name="__codelineno-22-19"></a>
+</span><span id="__span-22-20"><a id="__codelineno-22-20" name="__codelineno-22-20"></a><span class="w">    </span><span class="kt">void</span><span class="w"> </span><span class="nf">highFivesGuys</span><span class="p">(</span><span class="kt">void</span><span class="p">);</span>
+</span><span id="__span-22-21"><a id="__codelineno-22-21" name="__codelineno-22-21"></a><span class="p">};</span>
+</span><span id="__span-22-22"><a id="__codelineno-22-22" name="__codelineno-22-22"></a>
+</span><span id="__span-22-23"><a id="__codelineno-22-23" name="__codelineno-22-23"></a><span class="cp">#endif</span>
+</span></code></pre></div></td></tr></table></div>
+<ol>
+<li><strong><code>virtual public ClapTrap</code></strong> — ScavTrap と同じく virtual 継承。
+   <strong>両方</strong> virtual でないとダイヤモンド問題は解決しない。</li>
+</ol>
+<h3 id="diamondtraphpp">DiamondTrap.hpp<a class="headerlink" href="#diamondtraphpp" title="Permanent link">&para;</a></h3>
+<div class="language-cpp highlight"><table class="highlighttable"><tr><th colspan="2" class="filename"><span class="filename">DiamondTrap.hpp</span></th></tr><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal"><a href="#__codelineno-23-1"> 1</a></span>
+<span class="normal"><a href="#__codelineno-23-2"> 2</a></span>
+<span class="normal"><a href="#__codelineno-23-3"> 3</a></span>
+<span class="normal"><a href="#__codelineno-23-4"> 4</a></span>
+<span class="normal"><a href="#__codelineno-23-5"> 5</a></span>
+<span class="normal"><a href="#__codelineno-23-6"> 6</a></span>
+<span class="normal"><a href="#__codelineno-23-7"> 7</a></span>
+<span class="normal"><a href="#__codelineno-23-8"> 8</a></span>
+<span class="normal"><a href="#__codelineno-23-9"> 9</a></span>
+<span class="normal"><a href="#__codelineno-23-10">10</a></span>
+<span class="normal"><a href="#__codelineno-23-11">11</a></span>
+<span class="normal"><a href="#__codelineno-23-12">12</a></span>
+<span class="normal"><a href="#__codelineno-23-13">13</a></span>
+<span class="normal"><a href="#__codelineno-23-14">14</a></span>
+<span class="normal"><a href="#__codelineno-23-15">15</a></span>
+<span class="normal"><a href="#__codelineno-23-16">16</a></span>
+<span class="normal"><a href="#__codelineno-23-17">17</a></span>
+<span class="normal"><a href="#__codelineno-23-18">18</a></span>
+<span class="normal"><a href="#__codelineno-23-19">19</a></span>
+<span class="normal"><a href="#__codelineno-23-20">20</a></span>
+<span class="normal"><a href="#__codelineno-23-21">21</a></span>
+<span class="normal"><a href="#__codelineno-23-22">22</a></span>
+<span class="normal"><a href="#__codelineno-23-23">23</a></span>
+<span class="normal"><a href="#__codelineno-23-24">24</a></span>
+<span class="normal"><a href="#__codelineno-23-25">25</a></span>
+<span class="normal"><a href="#__codelineno-23-26">26</a></span>
+<span class="normal"><a href="#__codelineno-23-27">27</a></span>
+<span class="normal"><a href="#__codelineno-23-28">28</a></span>
+<span class="normal"><a href="#__codelineno-23-29">29</a></span>
+<span class="normal"><a href="#__codelineno-23-30">30</a></span>
+<span class="normal"><a href="#__codelineno-23-31">31</a></span>
+<span class="normal"><a href="#__codelineno-23-32">32</a></span>
+<span class="normal"><a href="#__codelineno-23-33">33</a></span>
+<span class="normal"><a href="#__codelineno-23-34">34</a></span>
+<span class="normal"><a href="#__codelineno-23-35">35</a></span>
+<span class="normal"><a href="#__codelineno-23-36">36</a></span></pre></div></td><td class="code"><div><pre><span></span><code><span id="__span-23-1"><a id="__codelineno-23-1" name="__codelineno-23-1"></a><span class="cp">#ifndef DIAMONDTRAP_HPP</span>
+</span><span id="__span-23-2"><a id="__codelineno-23-2" name="__codelineno-23-2"></a><span class="cp"># define DIAMONDTRAP_HPP</span>
+</span><span id="__span-23-3"><a id="__codelineno-23-3" name="__codelineno-23-3"></a>
+</span><span id="__span-23-4"><a id="__codelineno-23-4" name="__codelineno-23-4"></a><span class="cp">#</span><span class="w"> </span><span class="cp">include</span><span class="w"> </span><span class="cpf">&quot;ScavTrap.hpp&quot;</span>
+</span><span id="__span-23-5"><a id="__codelineno-23-5" name="__codelineno-23-5"></a><span class="cp">#</span><span class="w"> </span><span class="cp">include</span><span class="w"> </span><span class="cpf">&quot;FragTrap.hpp&quot;</span>
+</span><span id="__span-23-6"><a id="__codelineno-23-6" name="__codelineno-23-6"></a>
+</span><span id="__span-23-7"><a id="__codelineno-23-7" name="__codelineno-23-7"></a><span class="c1">// ── 多重継承 ──</span>
+</span><span id="__span-23-8"><a id="__codelineno-23-8" name="__codelineno-23-8"></a><span class="c1">// カンマ区切りで複数の親を指定</span>
+</span><span id="__span-23-9"><a id="__codelineno-23-9" name="__codelineno-23-9"></a><span class="k">class</span><span class="w"> </span><span class="nc">DiamondTrap</span><span class="w"> </span><span class="o">:</span>
+</span><span id="__span-23-10"><a id="__codelineno-23-10" name="__codelineno-23-10"></a><span class="w">    </span><span class="k">public</span><span class="w"> </span><span class="n">FragTrap</span><span class="p">,</span><span class="w">                 </span><span class="c1">// (1)</span>
+</span><span id="__span-23-11"><a id="__codelineno-23-11" name="__codelineno-23-11"></a><span class="w">    </span><span class="k">public</span><span class="w"> </span><span class="n">ScavTrap</span>
+</span><span id="__span-23-12"><a id="__codelineno-23-12" name="__codelineno-23-12"></a><span class="p">{</span>
+</span><span id="__span-23-13"><a id="__codelineno-23-13" name="__codelineno-23-13"></a><span class="k">public</span><span class="o">:</span>
+</span><span id="__span-23-14"><a id="__codelineno-23-14" name="__codelineno-23-14"></a><span class="w">    </span><span class="n">DiamondTrap</span><span class="p">(</span><span class="kt">void</span><span class="p">);</span>
+</span><span id="__span-23-15"><a id="__codelineno-23-15" name="__codelineno-23-15"></a><span class="w">    </span><span class="n">DiamondTrap</span><span class="p">(</span>
+</span><span id="__span-23-16"><a id="__codelineno-23-16" name="__codelineno-23-16"></a><span class="w">        </span><span class="k">const</span><span class="w"> </span><span class="n">std</span><span class="o">::</span><span class="n">string</span><span class="o">&amp;</span><span class="w"> </span><span class="n">name</span><span class="p">);</span>
+</span><span id="__span-23-17"><a id="__codelineno-23-17" name="__codelineno-23-17"></a><span class="w">    </span><span class="n">DiamondTrap</span><span class="p">(</span>
+</span><span id="__span-23-18"><a id="__codelineno-23-18" name="__codelineno-23-18"></a><span class="w">        </span><span class="k">const</span><span class="w"> </span><span class="n">DiamondTrap</span><span class="o">&amp;</span><span class="w"> </span><span class="n">other</span><span class="p">);</span>
+</span><span id="__span-23-19"><a id="__codelineno-23-19" name="__codelineno-23-19"></a><span class="w">    </span><span class="n">DiamondTrap</span><span class="o">&amp;</span><span class="w"> </span><span class="k">operator</span><span class="o">=</span><span class="p">(</span>
+</span><span id="__span-23-20"><a id="__codelineno-23-20" name="__codelineno-23-20"></a><span class="w">        </span><span class="k">const</span><span class="w"> </span><span class="n">DiamondTrap</span><span class="o">&amp;</span><span class="w"> </span><span class="n">other</span><span class="p">);</span>
+</span><span id="__span-23-21"><a id="__codelineno-23-21" name="__codelineno-23-21"></a><span class="w">    </span><span class="o">~</span><span class="n">DiamondTrap</span><span class="p">(</span><span class="kt">void</span><span class="p">);</span>
+</span><span id="__span-23-22"><a id="__codelineno-23-22" name="__codelineno-23-22"></a>
+</span><span id="__span-23-23"><a id="__codelineno-23-23" name="__codelineno-23-23"></a><span class="w">    </span><span class="c1">// ── using 宣言 ──</span>
+</span><span id="__span-23-24"><a id="__codelineno-23-24" name="__codelineno-23-24"></a><span class="w">    </span><span class="c1">// 両親で曖昧になる attack を</span>
+</span><span id="__span-23-25"><a id="__codelineno-23-25" name="__codelineno-23-25"></a><span class="w">    </span><span class="c1">// ScavTrap 版に統一</span>
+</span><span id="__span-23-26"><a id="__codelineno-23-26" name="__codelineno-23-26"></a><span class="w">    </span><span class="k">using</span><span class="w"> </span><span class="n">ScavTrap</span><span class="o">::</span><span class="n">attack</span><span class="p">;</span><span class="w">           </span><span class="c1">// (2)</span>
+</span><span id="__span-23-27"><a id="__codelineno-23-27" name="__codelineno-23-27"></a>
+</span><span id="__span-23-28"><a id="__codelineno-23-28" name="__codelineno-23-28"></a><span class="w">    </span><span class="kt">void</span><span class="w"> </span><span class="nf">whoAmI</span><span class="p">(</span><span class="kt">void</span><span class="p">);</span>
+</span><span id="__span-23-29"><a id="__codelineno-23-29" name="__codelineno-23-29"></a>
+</span><span id="__span-23-30"><a id="__codelineno-23-30" name="__codelineno-23-30"></a><span class="k">private</span><span class="o">:</span>
+</span><span id="__span-23-31"><a id="__codelineno-23-31" name="__codelineno-23-31"></a><span class="w">    </span><span class="c1">// DiamondTrap 独自の _name</span>
+</span><span id="__span-23-32"><a id="__codelineno-23-32" name="__codelineno-23-32"></a><span class="w">    </span><span class="c1">// ClapTrap::_name とは別の変数</span>
+</span><span id="__span-23-33"><a id="__codelineno-23-33" name="__codelineno-23-33"></a><span class="w">    </span><span class="n">std</span><span class="o">::</span><span class="n">string</span><span class="w"> </span><span class="n">_name</span><span class="p">;</span><span class="w">                </span><span class="c1">// (3)</span>
+</span><span id="__span-23-34"><a id="__codelineno-23-34" name="__codelineno-23-34"></a><span class="p">};</span>
+</span><span id="__span-23-35"><a id="__codelineno-23-35" name="__codelineno-23-35"></a>
+</span><span id="__span-23-36"><a id="__codelineno-23-36" name="__codelineno-23-36"></a><span class="cp">#endif</span>
+</span></code></pre></div></td></tr></table></div>
+<ol>
+<li><strong><code>public FragTrap, public ScavTrap</code></strong> — カンマ区切りで複数の親を指定。
+   宣言順は <strong>FragTrap → ScavTrap</strong>（この順で構築される）。</li>
+<li><strong><code>using ScavTrap::attack;</code></strong> — 両親に attack が存在して曖昧になるため、
+   ScavTrap 版を使うと明示。</li>
+<li><strong>DiamondTrap 独自の <code>_name</code></strong> — ClapTrap::_name とは <strong>別の変数</strong>。
+   同名だがスコープが異なるので共存できる。</li>
+</ol>
+<h3 id="diamondtrapcpp">DiamondTrap.cpp（コンストラクタ）<a class="headerlink" href="#diamondtrapcpp" title="Permanent link">&para;</a></h3>
+<div class="language-cpp highlight"><table class="highlighttable"><tr><th colspan="2" class="filename"><span class="filename">DiamondTrap.cpp (コンストラクタ)</span></th></tr><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal"><a href="#__codelineno-24-1"> 1</a></span>
+<span class="normal"><a href="#__codelineno-24-2"> 2</a></span>
+<span class="normal"><a href="#__codelineno-24-3"> 3</a></span>
+<span class="normal"><a href="#__codelineno-24-4"> 4</a></span>
+<span class="normal"><a href="#__codelineno-24-5"> 5</a></span>
+<span class="normal"><a href="#__codelineno-24-6"> 6</a></span>
+<span class="normal"><a href="#__codelineno-24-7"> 7</a></span>
+<span class="normal"><a href="#__codelineno-24-8"> 8</a></span>
+<span class="normal"><a href="#__codelineno-24-9"> 9</a></span>
+<span class="normal"><a href="#__codelineno-24-10">10</a></span>
+<span class="normal"><a href="#__codelineno-24-11">11</a></span>
+<span class="normal"><a href="#__codelineno-24-12">12</a></span>
+<span class="normal"><a href="#__codelineno-24-13">13</a></span>
+<span class="normal"><a href="#__codelineno-24-14">14</a></span>
+<span class="normal"><a href="#__codelineno-24-15">15</a></span>
+<span class="normal"><a href="#__codelineno-24-16">16</a></span>
+<span class="normal"><a href="#__codelineno-24-17">17</a></span>
+<span class="normal"><a href="#__codelineno-24-18">18</a></span>
+<span class="normal"><a href="#__codelineno-24-19">19</a></span>
+<span class="normal"><a href="#__codelineno-24-20">20</a></span>
+<span class="normal"><a href="#__codelineno-24-21">21</a></span>
+<span class="normal"><a href="#__codelineno-24-22">22</a></span>
+<span class="normal"><a href="#__codelineno-24-23">23</a></span>
+<span class="normal"><a href="#__codelineno-24-24">24</a></span>
+<span class="normal"><a href="#__codelineno-24-25">25</a></span>
+<span class="normal"><a href="#__codelineno-24-26">26</a></span>
+<span class="normal"><a href="#__codelineno-24-27">27</a></span>
+<span class="normal"><a href="#__codelineno-24-28">28</a></span>
+<span class="normal"><a href="#__codelineno-24-29">29</a></span>
+<span class="normal"><a href="#__codelineno-24-30">30</a></span>
+<span class="normal"><a href="#__codelineno-24-31">31</a></span>
+<span class="normal"><a href="#__codelineno-24-32">32</a></span>
+<span class="normal"><a href="#__codelineno-24-33">33</a></span>
+<span class="normal"><a href="#__codelineno-24-34">34</a></span>
+<span class="normal"><a href="#__codelineno-24-35">35</a></span>
+<span class="normal"><a href="#__codelineno-24-36">36</a></span>
+<span class="normal"><a href="#__codelineno-24-37">37</a></span>
+<span class="normal"><a href="#__codelineno-24-38">38</a></span>
+<span class="normal"><a href="#__codelineno-24-39">39</a></span>
+<span class="normal"><a href="#__codelineno-24-40">40</a></span>
+<span class="normal"><a href="#__codelineno-24-41">41</a></span>
+<span class="normal"><a href="#__codelineno-24-42">42</a></span>
+<span class="normal"><a href="#__codelineno-24-43">43</a></span>
+<span class="normal"><a href="#__codelineno-24-44">44</a></span>
+<span class="normal"><a href="#__codelineno-24-45">45</a></span>
+<span class="normal"><a href="#__codelineno-24-46">46</a></span>
+<span class="normal"><a href="#__codelineno-24-47">47</a></span>
+<span class="normal"><a href="#__codelineno-24-48">48</a></span>
+<span class="normal"><a href="#__codelineno-24-49">49</a></span>
+<span class="normal"><a href="#__codelineno-24-50">50</a></span>
+<span class="normal"><a href="#__codelineno-24-51">51</a></span>
+<span class="normal"><a href="#__codelineno-24-52">52</a></span>
+<span class="normal"><a href="#__codelineno-24-53">53</a></span>
+<span class="normal"><a href="#__codelineno-24-54">54</a></span>
+<span class="normal"><a href="#__codelineno-24-55">55</a></span>
+<span class="normal"><a href="#__codelineno-24-56">56</a></span>
+<span class="normal"><a href="#__codelineno-24-57">57</a></span>
+<span class="normal"><a href="#__codelineno-24-58">58</a></span>
+<span class="normal"><a href="#__codelineno-24-59">59</a></span>
+<span class="normal"><a href="#__codelineno-24-60">60</a></span>
+<span class="normal"><a href="#__codelineno-24-61">61</a></span>
+<span class="normal"><a href="#__codelineno-24-62">62</a></span>
+<span class="normal"><a href="#__codelineno-24-63">63</a></span>
+<span class="normal"><a href="#__codelineno-24-64">64</a></span>
+<span class="normal"><a href="#__codelineno-24-65">65</a></span>
+<span class="normal"><a href="#__codelineno-24-66">66</a></span>
+<span class="normal"><a href="#__codelineno-24-67">67</a></span>
+<span class="normal"><a href="#__codelineno-24-68">68</a></span>
+<span class="normal"><a href="#__codelineno-24-69">69</a></span>
+<span class="normal"><a href="#__codelineno-24-70">70</a></span>
+<span class="normal"><a href="#__codelineno-24-71">71</a></span>
+<span class="normal"><a href="#__codelineno-24-72">72</a></span>
+<span class="normal"><a href="#__codelineno-24-73">73</a></span>
+<span class="normal"><a href="#__codelineno-24-74">74</a></span>
+<span class="normal"><a href="#__codelineno-24-75">75</a></span>
+<span class="normal"><a href="#__codelineno-24-76">76</a></span>
+<span class="normal"><a href="#__codelineno-24-77">77</a></span>
+<span class="normal"><a href="#__codelineno-24-78">78</a></span>
+<span class="normal"><a href="#__codelineno-24-79">79</a></span>
+<span class="normal"><a href="#__codelineno-24-80">80</a></span>
+<span class="normal"><a href="#__codelineno-24-81">81</a></span></pre></div></td><td class="code"><div><pre><span></span><code><span id="__span-24-1"><a id="__codelineno-24-1" name="__codelineno-24-1"></a><span class="cp">#include</span><span class="w"> </span><span class="cpf">&quot;DiamondTrap.hpp&quot;</span>
+</span><span id="__span-24-2"><a id="__codelineno-24-2" name="__codelineno-24-2"></a><span class="cp">#include</span><span class="w"> </span><span class="cpf">&lt;iostream&gt;</span>
+</span><span id="__span-24-3"><a id="__codelineno-24-3" name="__codelineno-24-3"></a>
+</span><span id="__span-24-4"><a id="__codelineno-24-4" name="__codelineno-24-4"></a><span class="c1">// ── デフォルトコンストラクタ ──</span>
+</span><span id="__span-24-5"><a id="__codelineno-24-5" name="__codelineno-24-5"></a><span class="c1">// virtual 基底の ClapTrap を</span>
+</span><span id="__span-24-6"><a id="__codelineno-24-6" name="__codelineno-24-6"></a><span class="c1">// 最派生クラス（DiamondTrap）が直接呼ぶ！</span>
+</span><span id="__span-24-7"><a id="__codelineno-24-7" name="__codelineno-24-7"></a><span class="n">DiamondTrap</span><span class="o">::</span><span class="n">DiamondTrap</span><span class="p">(</span><span class="kt">void</span><span class="p">)</span>
+</span><span id="__span-24-8"><a id="__codelineno-24-8" name="__codelineno-24-8"></a><span class="w">    </span><span class="o">:</span><span class="w"> </span><span class="n">ClapTrap</span><span class="p">(</span><span class="s">&quot;default_clap_name&quot;</span><span class="p">),</span><span class="w"> </span><span class="c1">// (1)</span>
+</span><span id="__span-24-9"><a id="__codelineno-24-9" name="__codelineno-24-9"></a><span class="w">      </span><span class="n">FragTrap</span><span class="p">(),</span>
+</span><span id="__span-24-10"><a id="__codelineno-24-10" name="__codelineno-24-10"></a><span class="w">      </span><span class="n">ScavTrap</span><span class="p">(),</span>
+</span><span id="__span-24-11"><a id="__codelineno-24-11" name="__codelineno-24-11"></a><span class="w">      </span><span class="n">_name</span><span class="p">(</span><span class="s">&quot;default&quot;</span><span class="p">)</span>
+</span><span id="__span-24-12"><a id="__codelineno-24-12" name="__codelineno-24-12"></a><span class="p">{</span>
+</span><span id="__span-24-13"><a id="__codelineno-24-13" name="__codelineno-24-13"></a><span class="w">    </span><span class="c1">// 課題仕様のステータスに上書き:</span>
+</span><span id="__span-24-14"><a id="__codelineno-24-14" name="__codelineno-24-14"></a><span class="w">    </span><span class="c1">// HP = FragTrap (100)</span>
+</span><span id="__span-24-15"><a id="__codelineno-24-15" name="__codelineno-24-15"></a><span class="w">    </span><span class="c1">// EP = ScavTrap (50)</span>
+</span><span id="__span-24-16"><a id="__codelineno-24-16" name="__codelineno-24-16"></a><span class="w">    </span><span class="c1">// AD = FragTrap (30)</span>
+</span><span id="__span-24-17"><a id="__codelineno-24-17" name="__codelineno-24-17"></a><span class="w">    </span><span class="n">_hitPoints</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">100</span><span class="p">;</span><span class="w">                 </span><span class="c1">// (2)</span>
+</span><span id="__span-24-18"><a id="__codelineno-24-18" name="__codelineno-24-18"></a><span class="w">    </span><span class="n">_energyPoints</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">50</span><span class="p">;</span>
+</span><span id="__span-24-19"><a id="__codelineno-24-19" name="__codelineno-24-19"></a><span class="w">    </span><span class="n">_attackDamage</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">30</span><span class="p">;</span>
+</span><span id="__span-24-20"><a id="__codelineno-24-20" name="__codelineno-24-20"></a><span class="w">    </span><span class="n">std</span><span class="o">::</span><span class="n">cout</span>
+</span><span id="__span-24-21"><a id="__codelineno-24-21" name="__codelineno-24-21"></a><span class="w">        </span><span class="o">&lt;&lt;</span><span class="w"> </span><span class="s">&quot;DiamondTrap default &quot;</span>
+</span><span id="__span-24-22"><a id="__codelineno-24-22" name="__codelineno-24-22"></a><span class="w">        </span><span class="o">&lt;&lt;</span><span class="w"> </span><span class="s">&quot;constructor called&quot;</span>
+</span><span id="__span-24-23"><a id="__codelineno-24-23" name="__codelineno-24-23"></a><span class="w">        </span><span class="o">&lt;&lt;</span><span class="w"> </span><span class="n">std</span><span class="o">::</span><span class="n">endl</span><span class="p">;</span>
+</span><span id="__span-24-24"><a id="__codelineno-24-24" name="__codelineno-24-24"></a><span class="p">}</span>
+</span><span id="__span-24-25"><a id="__codelineno-24-25" name="__codelineno-24-25"></a>
+</span><span id="__span-24-26"><a id="__codelineno-24-26" name="__codelineno-24-26"></a><span class="c1">// ── 名前付きコンストラクタ ──</span>
+</span><span id="__span-24-27"><a id="__codelineno-24-27" name="__codelineno-24-27"></a><span class="n">DiamondTrap</span><span class="o">::</span><span class="n">DiamondTrap</span><span class="p">(</span>
+</span><span id="__span-24-28"><a id="__codelineno-24-28" name="__codelineno-24-28"></a><span class="w">    </span><span class="k">const</span><span class="w"> </span><span class="n">std</span><span class="o">::</span><span class="n">string</span><span class="o">&amp;</span><span class="w"> </span><span class="n">name</span><span class="p">)</span>
+</span><span id="__span-24-29"><a id="__codelineno-24-29" name="__codelineno-24-29"></a><span class="w">    </span><span class="o">:</span><span class="w"> </span><span class="n">ClapTrap</span><span class="p">(</span><span class="n">name</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="s">&quot;_clap_name&quot;</span><span class="p">),</span><span class="w">  </span><span class="c1">// (3)</span>
+</span><span id="__span-24-30"><a id="__codelineno-24-30" name="__codelineno-24-30"></a><span class="w">      </span><span class="n">FragTrap</span><span class="p">(</span><span class="n">name</span><span class="p">),</span>
+</span><span id="__span-24-31"><a id="__codelineno-24-31" name="__codelineno-24-31"></a><span class="w">      </span><span class="n">ScavTrap</span><span class="p">(</span><span class="n">name</span><span class="p">),</span>
+</span><span id="__span-24-32"><a id="__codelineno-24-32" name="__codelineno-24-32"></a><span class="w">      </span><span class="n">_name</span><span class="p">(</span><span class="n">name</span><span class="p">)</span><span class="w">                     </span><span class="c1">// (4)</span>
+</span><span id="__span-24-33"><a id="__codelineno-24-33" name="__codelineno-24-33"></a><span class="p">{</span>
+</span><span id="__span-24-34"><a id="__codelineno-24-34" name="__codelineno-24-34"></a><span class="w">    </span><span class="n">_hitPoints</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">100</span><span class="p">;</span>
+</span><span id="__span-24-35"><a id="__codelineno-24-35" name="__codelineno-24-35"></a><span class="w">    </span><span class="n">_energyPoints</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">50</span><span class="p">;</span>
+</span><span id="__span-24-36"><a id="__codelineno-24-36" name="__codelineno-24-36"></a><span class="w">    </span><span class="n">_attackDamage</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">30</span><span class="p">;</span>
+</span><span id="__span-24-37"><a id="__codelineno-24-37" name="__codelineno-24-37"></a><span class="w">    </span><span class="n">std</span><span class="o">::</span><span class="n">cout</span>
+</span><span id="__span-24-38"><a id="__codelineno-24-38" name="__codelineno-24-38"></a><span class="w">        </span><span class="o">&lt;&lt;</span><span class="w"> </span><span class="s">&quot;DiamondTrap constructor &quot;</span>
+</span><span id="__span-24-39"><a id="__codelineno-24-39" name="__codelineno-24-39"></a><span class="w">        </span><span class="o">&lt;&lt;</span><span class="w"> </span><span class="s">&quot;called for &quot;</span><span class="w"> </span><span class="o">&lt;&lt;</span><span class="w"> </span><span class="n">_name</span>
+</span><span id="__span-24-40"><a id="__codelineno-24-40" name="__codelineno-24-40"></a><span class="w">        </span><span class="o">&lt;&lt;</span><span class="w"> </span><span class="n">std</span><span class="o">::</span><span class="n">endl</span><span class="p">;</span>
+</span><span id="__span-24-41"><a id="__codelineno-24-41" name="__codelineno-24-41"></a><span class="p">}</span>
+</span><span id="__span-24-42"><a id="__codelineno-24-42" name="__codelineno-24-42"></a>
+</span><span id="__span-24-43"><a id="__codelineno-24-43" name="__codelineno-24-43"></a><span class="c1">// ── コピーコンストラクタ ──</span>
+</span><span id="__span-24-44"><a id="__codelineno-24-44" name="__codelineno-24-44"></a><span class="n">DiamondTrap</span><span class="o">::</span><span class="n">DiamondTrap</span><span class="p">(</span>
+</span><span id="__span-24-45"><a id="__codelineno-24-45" name="__codelineno-24-45"></a><span class="w">    </span><span class="k">const</span><span class="w"> </span><span class="n">DiamondTrap</span><span class="o">&amp;</span><span class="w"> </span><span class="n">other</span><span class="p">)</span>
+</span><span id="__span-24-46"><a id="__codelineno-24-46" name="__codelineno-24-46"></a><span class="w">    </span><span class="o">:</span><span class="w"> </span><span class="n">ClapTrap</span><span class="p">(</span><span class="n">other</span><span class="p">),</span>
+</span><span id="__span-24-47"><a id="__codelineno-24-47" name="__codelineno-24-47"></a><span class="w">      </span><span class="n">FragTrap</span><span class="p">(</span><span class="n">other</span><span class="p">),</span>
+</span><span id="__span-24-48"><a id="__codelineno-24-48" name="__codelineno-24-48"></a><span class="w">      </span><span class="n">ScavTrap</span><span class="p">(</span><span class="n">other</span><span class="p">),</span>
+</span><span id="__span-24-49"><a id="__codelineno-24-49" name="__codelineno-24-49"></a><span class="w">      </span><span class="n">_name</span><span class="p">(</span><span class="n">other</span><span class="p">.</span><span class="n">_name</span><span class="p">)</span>
+</span><span id="__span-24-50"><a id="__codelineno-24-50" name="__codelineno-24-50"></a><span class="p">{</span>
+</span><span id="__span-24-51"><a id="__codelineno-24-51" name="__codelineno-24-51"></a><span class="w">    </span><span class="n">std</span><span class="o">::</span><span class="n">cout</span>
+</span><span id="__span-24-52"><a id="__codelineno-24-52" name="__codelineno-24-52"></a><span class="w">        </span><span class="o">&lt;&lt;</span><span class="w"> </span><span class="s">&quot;DiamondTrap copy constructor&quot;</span>
+</span><span id="__span-24-53"><a id="__codelineno-24-53" name="__codelineno-24-53"></a><span class="w">        </span><span class="o">&lt;&lt;</span><span class="w"> </span><span class="s">&quot; called for &quot;</span><span class="w"> </span><span class="o">&lt;&lt;</span><span class="w"> </span><span class="n">_name</span>
+</span><span id="__span-24-54"><a id="__codelineno-24-54" name="__codelineno-24-54"></a><span class="w">        </span><span class="o">&lt;&lt;</span><span class="w"> </span><span class="n">std</span><span class="o">::</span><span class="n">endl</span><span class="p">;</span>
+</span><span id="__span-24-55"><a id="__codelineno-24-55" name="__codelineno-24-55"></a><span class="p">}</span>
+</span><span id="__span-24-56"><a id="__codelineno-24-56" name="__codelineno-24-56"></a>
+</span><span id="__span-24-57"><a id="__codelineno-24-57" name="__codelineno-24-57"></a><span class="c1">// ── 代入演算子 ──</span>
+</span><span id="__span-24-58"><a id="__codelineno-24-58" name="__codelineno-24-58"></a><span class="n">DiamondTrap</span><span class="o">&amp;</span><span class="w"> </span><span class="n">DiamondTrap</span><span class="o">::</span><span class="k">operator</span><span class="o">=</span><span class="p">(</span>
+</span><span id="__span-24-59"><a id="__codelineno-24-59" name="__codelineno-24-59"></a><span class="w">    </span><span class="k">const</span><span class="w"> </span><span class="n">DiamondTrap</span><span class="o">&amp;</span><span class="w"> </span><span class="n">other</span><span class="p">)</span>
+</span><span id="__span-24-60"><a id="__codelineno-24-60" name="__codelineno-24-60"></a><span class="p">{</span>
+</span><span id="__span-24-61"><a id="__codelineno-24-61" name="__codelineno-24-61"></a><span class="w">    </span><span class="n">std</span><span class="o">::</span><span class="n">cout</span>
+</span><span id="__span-24-62"><a id="__codelineno-24-62" name="__codelineno-24-62"></a><span class="w">        </span><span class="o">&lt;&lt;</span><span class="w"> </span><span class="s">&quot;DiamondTrap copy assignment&quot;</span>
+</span><span id="__span-24-63"><a id="__codelineno-24-63" name="__codelineno-24-63"></a><span class="w">        </span><span class="o">&lt;&lt;</span><span class="w"> </span><span class="s">&quot; operator called&quot;</span>
+</span><span id="__span-24-64"><a id="__codelineno-24-64" name="__codelineno-24-64"></a><span class="w">        </span><span class="o">&lt;&lt;</span><span class="w"> </span><span class="n">std</span><span class="o">::</span><span class="n">endl</span><span class="p">;</span>
+</span><span id="__span-24-65"><a id="__codelineno-24-65" name="__codelineno-24-65"></a><span class="w">    </span><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="k">this</span><span class="w"> </span><span class="o">!=</span><span class="w"> </span><span class="o">&amp;</span><span class="n">other</span><span class="p">)</span>
+</span><span id="__span-24-66"><a id="__codelineno-24-66" name="__codelineno-24-66"></a><span class="w">    </span><span class="p">{</span>
+</span><span id="__span-24-67"><a id="__codelineno-24-67" name="__codelineno-24-67"></a><span class="w">        </span><span class="c1">// virtual 基底なので1回呼べば十分</span>
+</span><span id="__span-24-68"><a id="__codelineno-24-68" name="__codelineno-24-68"></a><span class="w">        </span><span class="n">ClapTrap</span><span class="o">::</span><span class="k">operator</span><span class="o">=</span><span class="p">(</span><span class="n">other</span><span class="p">);</span><span class="w">   </span><span class="c1">// (5)</span>
+</span><span id="__span-24-69"><a id="__codelineno-24-69" name="__codelineno-24-69"></a><span class="w">        </span><span class="n">_name</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">other</span><span class="p">.</span><span class="n">_name</span><span class="p">;</span>
+</span><span id="__span-24-70"><a id="__codelineno-24-70" name="__codelineno-24-70"></a><span class="w">    </span><span class="p">}</span>
+</span><span id="__span-24-71"><a id="__codelineno-24-71" name="__codelineno-24-71"></a><span class="w">    </span><span class="k">return</span><span class="w"> </span><span class="o">*</span><span class="k">this</span><span class="p">;</span>
+</span><span id="__span-24-72"><a id="__codelineno-24-72" name="__codelineno-24-72"></a><span class="p">}</span>
+</span><span id="__span-24-73"><a id="__codelineno-24-73" name="__codelineno-24-73"></a>
+</span><span id="__span-24-74"><a id="__codelineno-24-74" name="__codelineno-24-74"></a><span class="c1">// ── デストラクタ ──</span>
+</span><span id="__span-24-75"><a id="__codelineno-24-75" name="__codelineno-24-75"></a><span class="n">DiamondTrap</span><span class="o">::~</span><span class="n">DiamondTrap</span><span class="p">(</span><span class="kt">void</span><span class="p">)</span>
+</span><span id="__span-24-76"><a id="__codelineno-24-76" name="__codelineno-24-76"></a><span class="p">{</span>
+</span><span id="__span-24-77"><a id="__codelineno-24-77" name="__codelineno-24-77"></a><span class="w">    </span><span class="n">std</span><span class="o">::</span><span class="n">cout</span>
+</span><span id="__span-24-78"><a id="__codelineno-24-78" name="__codelineno-24-78"></a><span class="w">        </span><span class="o">&lt;&lt;</span><span class="w"> </span><span class="s">&quot;DiamondTrap destructor &quot;</span>
+</span><span id="__span-24-79"><a id="__codelineno-24-79" name="__codelineno-24-79"></a><span class="w">        </span><span class="o">&lt;&lt;</span><span class="w"> </span><span class="s">&quot;called for &quot;</span><span class="w"> </span><span class="o">&lt;&lt;</span><span class="w"> </span><span class="n">_name</span>
+</span><span id="__span-24-80"><a id="__codelineno-24-80" name="__codelineno-24-80"></a><span class="w">        </span><span class="o">&lt;&lt;</span><span class="w"> </span><span class="n">std</span><span class="o">::</span><span class="n">endl</span><span class="p">;</span>
+</span><span id="__span-24-81"><a id="__codelineno-24-81" name="__codelineno-24-81"></a><span class="p">}</span>
+</span></code></pre></div></td></tr></table></div>
+<ol>
+<li><strong><code>ClapTrap("default_clap_name")</code></strong> — virtual 基底のコンストラクタは
+   <strong>最も派生したクラスから直接呼ぶ</strong>。
+   FragTrap/ScavTrap の初期化リスト内の ClapTrap() は無視される。</li>
+<li><strong>ステータス上書き</strong> — HP=FragTrap(100), EP=ScavTrap(50), AD=FragTrap(30) に設定。</li>
+<li><strong><code>name + "_clap_name"</code></strong> — ClapTrap::_name に渡す値。
+   DiamondTrap::_name とは異なる値にする（subject 仕様）。</li>
+<li><strong><code>_name(name)</code></strong> — DiamondTrap 独自の _name を初期化。
+   ClapTrap::_name とは別の変数。</li>
+<li><strong><code>ClapTrap::operator=(other)</code></strong> — virtual 基底なので1回呼べば十分。
+   重複呼び出しの心配なし。</li>
+</ol>
+<h3 id="diamondtrapcppwhoami">DiamondTrap.cpp（whoAmI）<a class="headerlink" href="#diamondtrapcppwhoami" title="Permanent link">&para;</a></h3>
+<div class="language-cpp highlight"><table class="highlighttable"><tr><th colspan="2" class="filename"><span class="filename">DiamondTrap.cpp (whoAmI)</span></th></tr><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal"><a href="#__codelineno-25-1"> 1</a></span>
+<span class="normal"><a href="#__codelineno-25-2"> 2</a></span>
+<span class="normal"><a href="#__codelineno-25-3"> 3</a></span>
+<span class="normal"><a href="#__codelineno-25-4"> 4</a></span>
+<span class="normal"><a href="#__codelineno-25-5"> 5</a></span>
+<span class="normal"><a href="#__codelineno-25-6"> 6</a></span>
+<span class="normal"><a href="#__codelineno-25-7"> 7</a></span>
+<span class="normal"><a href="#__codelineno-25-8"> 8</a></span>
+<span class="normal"><a href="#__codelineno-25-9"> 9</a></span>
+<span class="normal"><a href="#__codelineno-25-10">10</a></span>
+<span class="normal"><a href="#__codelineno-25-11">11</a></span></pre></div></td><td class="code"><div><pre><span></span><code><span id="__span-25-1"><a id="__codelineno-25-1" name="__codelineno-25-1"></a><span class="c1">// ── whoAmI メソッド ──</span>
+</span><span id="__span-25-2"><a id="__codelineno-25-2" name="__codelineno-25-2"></a><span class="c1">// 2つの _name を両方表示する</span>
+</span><span id="__span-25-3"><a id="__codelineno-25-3" name="__codelineno-25-3"></a><span class="kt">void</span><span class="w"> </span><span class="nf">DiamondTrap::whoAmI</span><span class="p">(</span><span class="kt">void</span><span class="p">)</span>
+</span><span id="__span-25-4"><a id="__codelineno-25-4" name="__codelineno-25-4"></a><span class="p">{</span>
+</span><span id="__span-25-5"><a id="__codelineno-25-5" name="__codelineno-25-5"></a><span class="w">    </span><span class="n">std</span><span class="o">::</span><span class="n">cout</span>
+</span><span id="__span-25-6"><a id="__codelineno-25-6" name="__codelineno-25-6"></a><span class="w">        </span><span class="o">&lt;&lt;</span><span class="w"> </span><span class="s">&quot;I am DiamondTrap &quot;</span>
+</span><span id="__span-25-7"><a id="__codelineno-25-7" name="__codelineno-25-7"></a><span class="w">        </span><span class="o">&lt;&lt;</span><span class="w"> </span><span class="n">_name</span><span class="w">                      </span><span class="c1">// (1)</span>
+</span><span id="__span-25-8"><a id="__codelineno-25-8" name="__codelineno-25-8"></a><span class="w">        </span><span class="o">&lt;&lt;</span><span class="w"> </span><span class="s">&quot; and my ClapTrap name is &quot;</span>
+</span><span id="__span-25-9"><a id="__codelineno-25-9" name="__codelineno-25-9"></a><span class="w">        </span><span class="o">&lt;&lt;</span><span class="w"> </span><span class="n">ClapTrap</span><span class="o">::</span><span class="n">_name</span><span class="w">            </span><span class="c1">// (2)</span>
+</span><span id="__span-25-10"><a id="__codelineno-25-10" name="__codelineno-25-10"></a><span class="w">        </span><span class="o">&lt;&lt;</span><span class="w"> </span><span class="n">std</span><span class="o">::</span><span class="n">endl</span><span class="p">;</span>
+</span><span id="__span-25-11"><a id="__codelineno-25-11" name="__codelineno-25-11"></a><span class="p">}</span>
+</span></code></pre></div></td></tr></table></div>
+<ol>
+<li><strong><code>_name</code></strong> — スコープが近い DiamondTrap::_name が自動で参照される。</li>
+<li><strong><code>ClapTrap::_name</code></strong> — スコープ解決演算子で明示的に親の _name を指定。</li>
+</ol>
+<h3 id="_7">コンストラクタ呼び出し順序の詳細<a class="headerlink" href="#_7" title="Permanent link">&para;</a></h3>
+<div class="language-text highlight"><pre><span></span><code><span id="__span-26-1"><a id="__codelineno-26-1" name="__codelineno-26-1" href="#__codelineno-26-1"></a>DiamondTrap(&quot;Diamond&quot;) の構築順:
+</span><span id="__span-26-2"><a id="__codelineno-26-2" name="__codelineno-26-2" href="#__codelineno-26-2"></a>
+</span><span id="__span-26-3"><a id="__codelineno-26-3" name="__codelineno-26-3" href="#__codelineno-26-3"></a> (1) ClapTrap(&quot;Diamond_clap_name&quot;)
+</span><span id="__span-26-4"><a id="__codelineno-26-4" name="__codelineno-26-4" href="#__codelineno-26-4"></a>     ← virtual 基底が最初！
+</span><span id="__span-26-5"><a id="__codelineno-26-5" name="__codelineno-26-5" href="#__codelineno-26-5"></a>     _name = &quot;Diamond_clap_name&quot;
+</span><span id="__span-26-6"><a id="__codelineno-26-6" name="__codelineno-26-6" href="#__codelineno-26-6"></a>     _hitPoints=10, _energyPoints=10,
+</span><span id="__span-26-7"><a id="__codelineno-26-7" name="__codelineno-26-7" href="#__codelineno-26-7"></a>     _attackDamage=0
+</span><span id="__span-26-8"><a id="__codelineno-26-8" name="__codelineno-26-8" href="#__codelineno-26-8"></a>
+</span><span id="__span-26-9"><a id="__codelineno-26-9" name="__codelineno-26-9" href="#__codelineno-26-9"></a> (2) FragTrap(&quot;Diamond&quot;)
+</span><span id="__span-26-10"><a id="__codelineno-26-10" name="__codelineno-26-10" href="#__codelineno-26-10"></a>     ← 宣言順で FragTrap が先
+</span><span id="__span-26-11"><a id="__codelineno-26-11" name="__codelineno-26-11" href="#__codelineno-26-11"></a>     _hitPoints=100, _energyPoints=100,
+</span><span id="__span-26-12"><a id="__codelineno-26-12" name="__codelineno-26-12" href="#__codelineno-26-12"></a>     _attackDamage=30
+</span><span id="__span-26-13"><a id="__codelineno-26-13" name="__codelineno-26-13" href="#__codelineno-26-13"></a>     （ClapTrap() は呼ばれない、既に (1) で完了）
+</span><span id="__span-26-14"><a id="__codelineno-26-14" name="__codelineno-26-14" href="#__codelineno-26-14"></a>
+</span><span id="__span-26-15"><a id="__codelineno-26-15" name="__codelineno-26-15" href="#__codelineno-26-15"></a> (3) ScavTrap(&quot;Diamond&quot;)
+</span><span id="__span-26-16"><a id="__codelineno-26-16" name="__codelineno-26-16" href="#__codelineno-26-16"></a>     ← 宣言順で ScavTrap が次
+</span><span id="__span-26-17"><a id="__codelineno-26-17" name="__codelineno-26-17" href="#__codelineno-26-17"></a>     _hitPoints=100, _energyPoints=50,
+</span><span id="__span-26-18"><a id="__codelineno-26-18" name="__codelineno-26-18" href="#__codelineno-26-18"></a>     _attackDamage=20
+</span><span id="__span-26-19"><a id="__codelineno-26-19" name="__codelineno-26-19" href="#__codelineno-26-19"></a>     （ClapTrap() は呼ばれない、既に (1) で完了）
+</span><span id="__span-26-20"><a id="__codelineno-26-20" name="__codelineno-26-20" href="#__codelineno-26-20"></a>
+</span><span id="__span-26-21"><a id="__codelineno-26-21" name="__codelineno-26-21" href="#__codelineno-26-21"></a> (4) DiamondTrap(&quot;Diamond&quot;)
+</span><span id="__span-26-22"><a id="__codelineno-26-22" name="__codelineno-26-22" href="#__codelineno-26-22"></a>     ← 自身が最後
+</span><span id="__span-26-23"><a id="__codelineno-26-23" name="__codelineno-26-23" href="#__codelineno-26-23"></a>     _hitPoints=100, _energyPoints=50,
+</span><span id="__span-26-24"><a id="__codelineno-26-24" name="__codelineno-26-24" href="#__codelineno-26-24"></a>     _attackDamage=30
+</span><span id="__span-26-25"><a id="__codelineno-26-25" name="__codelineno-26-25" href="#__codelineno-26-25"></a>     DiamondTrap::_name = &quot;Diamond&quot;
+</span><span id="__span-26-26"><a id="__codelineno-26-26" name="__codelineno-26-26" href="#__codelineno-26-26"></a>
+</span><span id="__span-26-27"><a id="__codelineno-26-27" name="__codelineno-26-27" href="#__codelineno-26-27"></a>破棄順: (4) → (3) → (2) → (1)
+</span><span id="__span-26-28"><a id="__codelineno-26-28" name="__codelineno-26-28" href="#__codelineno-26-28"></a>  （構築の完全な逆順）
+</span></code></pre></div>
+<div class="admonition warning">
+<p class="admonition-title">ステータスの上書き連鎖に注意</p>
+<p>FragTrap が HP=100, EP=100, AD=30 にした後、
+ScavTrap が HP=100, EP=50, AD=20 に上書きする。
+最終的に DiamondTrap のコンストラクタで HP=100, EP=50, AD=30 に設定し直す。
+<strong>上書き順序を意識すること</strong>。</p>
+</div>
+<hr />
+<h2 id="7">7. 評価シートの確認項目<a class="headerlink" href="#7" title="Permanent link">&para;</a></h2>
+<div class="admonition note">
+<p class="admonition-title">評価シート原文</p>
+<blockquote>
+<p>"Turn-in directory: ex03/"
+"Files to turn in: Makefile, ClapTrap.{h, hpp}, ClapTrap.cpp,
+ ScavTrap.{h, hpp}, ScavTrap.cpp, FragTrap.{h, hpp}, FragTrap.cpp,
+ DiamondTrap.{h, hpp}, DiamondTrap.cpp, main.cpp"</p>
+</blockquote>
+<p>virtual 継承、多重継承、using 宣言、スコープ解決、
+構築/破棄順序の全てが評価のポイント。</p>
+</div>
+<ul class="task-list">
+<li class="task-list-item"><label class="task-list-control"><input type="checkbox" disabled/><span class="task-list-indicator"></span></label> <code>make</code> が警告なく通る</li>
+<li class="task-list-item"><label class="task-list-control"><input type="checkbox" disabled/><span class="task-list-indicator"></span></label> ScavTrap と FragTrap が <code>virtual public ClapTrap</code> で継承している</li>
+<li class="task-list-item"><label class="task-list-control"><input type="checkbox" disabled/><span class="task-list-indicator"></span></label> DiamondTrap が FragTrap と ScavTrap を多重継承している</li>
+<li class="task-list-item"><label class="task-list-control"><input type="checkbox" disabled/><span class="task-list-indicator"></span></label> 構築順: ClapTrap → FragTrap → ScavTrap → DiamondTrap</li>
+<li class="task-list-item"><label class="task-list-control"><input type="checkbox" disabled/><span class="task-list-indicator"></span></label> 破棄順: DiamondTrap → ScavTrap → FragTrap → ClapTrap</li>
+<li class="task-list-item"><label class="task-list-control"><input type="checkbox" disabled/><span class="task-list-indicator"></span></label> ClapTrap のコンストラクタは <strong>1 回だけ</strong> 呼ばれる（virtual 基底）</li>
+<li class="task-list-item"><label class="task-list-control"><input type="checkbox" disabled/><span class="task-list-indicator"></span></label> attack で "ScavTrap" と表示される（using 宣言）</li>
+<li class="task-list-item"><label class="task-list-control"><input type="checkbox" disabled/><span class="task-list-indicator"></span></label> whoAmI で 2 つの異なる _name が表示される</li>
+</ul>
+<hr />
+<h2 id="8">8. テストチェックリスト<a class="headerlink" href="#8" title="Permanent link">&para;</a></h2>
+<h3 id="_8">構築/破棄順序<a class="headerlink" href="#_8" title="Permanent link">&para;</a></h3>
+<ul class="task-list">
+<li class="task-list-item"><label class="task-list-control"><input type="checkbox" disabled/><span class="task-list-indicator"></span></label> 構築順: ClapTrap → FragTrap → ScavTrap → DiamondTrap</li>
+<li class="task-list-item"><label class="task-list-control"><input type="checkbox" disabled/><span class="task-list-indicator"></span></label> 破棄順: DiamondTrap → ScavTrap → FragTrap → ClapTrap</li>
+<li class="task-list-item"><label class="task-list-control"><input type="checkbox" disabled/><span class="task-list-indicator"></span></label> ClapTrap のコンストラクタは <strong>1 回だけ</strong> 呼ばれる（virtual 基底）</li>
+</ul>
+<h3 id="_9">ステータス<a class="headerlink" href="#_9" title="Permanent link">&para;</a></h3>
+<ul class="task-list">
+<li class="task-list-item"><label class="task-list-control"><input type="checkbox" disabled/><span class="task-list-indicator"></span></label> HP = 100（FragTrap 由来）</li>
+<li class="task-list-item"><label class="task-list-control"><input type="checkbox" disabled/><span class="task-list-indicator"></span></label> EP = 50（ScavTrap 由来）</li>
+<li class="task-list-item"><label class="task-list-control"><input type="checkbox" disabled/><span class="task-list-indicator"></span></label> AD = 30（FragTrap 由来）</li>
+</ul>
+<h3 id="_10">メソッド<a class="headerlink" href="#_10" title="Permanent link">&para;</a></h3>
+<ul class="task-list">
+<li class="task-list-item"><label class="task-list-control"><input type="checkbox" disabled/><span class="task-list-indicator"></span></label> <code>attack()</code> が "ScavTrap" と表示する（using 宣言）</li>
+<li class="task-list-item"><label class="task-list-control"><input type="checkbox" disabled/><span class="task-list-indicator"></span></label> <code>guardGate()</code> が動作する（ScavTrap から継承）</li>
+<li class="task-list-item"><label class="task-list-control"><input type="checkbox" disabled/><span class="task-list-indicator"></span></label> <code>highFivesGuys()</code> が動作する（FragTrap から継承）</li>
+<li class="task-list-item"><label class="task-list-control"><input type="checkbox" disabled/><span class="task-list-indicator"></span></label> <code>whoAmI()</code> が DiamondTrap::_name と ClapTrap::_name の両方を表示する</li>
+</ul>
+<h3 id="whoami">whoAmI の出力<a class="headerlink" href="#whoami" title="Permanent link">&para;</a></h3>
+<ul class="task-list">
+<li class="task-list-item"><label class="task-list-control"><input type="checkbox" disabled/><span class="task-list-indicator"></span></label> DiamondTrap の名前が表示される（"Diamond"）</li>
+<li class="task-list-item"><label class="task-list-control"><input type="checkbox" disabled/><span class="task-list-indicator"></span></label> ClapTrap の名前が <code>&lt;name&gt;_clap_name</code> 形式で表示される（"Diamond_clap_name"）</li>
+<li class="task-list-item"><label class="task-list-control"><input type="checkbox" disabled/><span class="task-list-indicator"></span></label> 2 つの名前が異なる</li>
+</ul>
+<h3 id="ocf">OCF / 規約<a class="headerlink" href="#ocf" title="Permanent link">&para;</a></h3>
+<ul class="task-list">
+<li class="task-list-item"><label class="task-list-control"><input type="checkbox" disabled/><span class="task-list-indicator"></span></label> OCF が全て実装されている</li>
+<li class="task-list-item"><label class="task-list-control"><input type="checkbox" disabled/><span class="task-list-indicator"></span></label> ScavTrap と FragTrap が <code>virtual public ClapTrap</code> で継承している</li>
+<li class="task-list-item"><label class="task-list-control"><input type="checkbox" disabled/><span class="task-list-indicator"></span></label> <code>using namespace std;</code> なし</li>
+<li class="task-list-item"><label class="task-list-control"><input type="checkbox" disabled/><span class="task-list-indicator"></span></label> <code>printf</code> / <code>malloc</code> / <code>free</code> 不使用</li>
+</ul>
+<hr />
+<h2 id="9">9. ディフェンスで聞かれること<a class="headerlink" href="#9" title="Permanent link">&para;</a></h2>
+<table>
+<thead>
+<tr>
+<th>質問</th>
+<th>答え方</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>多重継承とは？</td>
+<td>2つ以上の親クラスを同時に継承すること</td>
+</tr>
+<tr>
+<td>ダイヤモンド問題とは？</td>
+<td>2つの親が同じ親を持つと、孫の中に共通の祖先が2つできてしまう問題</td>
+</tr>
+<tr>
+<td>ダイヤモンド問題を具体的に</td>
+<td>virtual なしだと <code>_name</code> や <code>_hitPoints</code> が DiamondTrap 内に2つでき、曖昧になる</td>
+</tr>
+<tr>
+<td>どう解決する？</td>
+<td>ScavTrap と FragTrap の両方を <code>virtual public ClapTrap</code> にする</td>
+</tr>
+<tr>
+<td>virtual 継承は何をする？</td>
+<td>共通の祖先を1つに統合し、ダイヤモンド問題を解決する</td>
+</tr>
+<tr>
+<td>片方だけ virtual じゃだめ？</td>
+<td>だめ。両方 virtual でないと ClapTrap は1つに統合されない</td>
+</tr>
+<tr>
+<td>virtual 基底の初期化はどこでする？</td>
+<td><strong>最も派生したクラス</strong>（DiamondTrap）から直接呼ぶ。C++ の仕様</td>
+</tr>
+<tr>
+<td>なぜ最派生から呼ぶ？</td>
+<td>ScavTrap と FragTrap のどちらが ClapTrap を初期化すべきか曖昧だから</td>
+</tr>
+<tr>
+<td>using 宣言の意味は？</td>
+<td>曖昧な候補（ScavTrap::attack と ClapTrap::attack）から1つを明示的に選ぶ</td>
+</tr>
+<tr>
+<td>using なしだとどうなる？</td>
+<td><code>diamond.attack()</code> が曖昧呼び出しでコンパイルエラー</td>
+</tr>
+<tr>
+<td>構築順は？</td>
+<td>ClapTrap → FragTrap → ScavTrap → DiamondTrap</td>
+</tr>
+<tr>
+<td>破棄順は？</td>
+<td>DiamondTrap → ScavTrap → FragTrap → ClapTrap（構築の逆順）</td>
+</tr>
+<tr>
+<td>ClapTrap コンストラクタは何回呼ばれる？</td>
+<td>1回だけ（virtual 基底なので）</td>
+</tr>
+<tr>
+<td>なぜ DiamondTrap に独自 <code>_name</code> が必要？</td>
+<td>subject の仕様。<code>_name</code> と <code>ClapTrap::_name</code> を別々に管理するため</td>
+</tr>
+<tr>
+<td><code>ClapTrap::_name</code> の <code>::</code> は？</td>
+<td>スコープ解決演算子。「ClapTrap クラスの _name」と明示する</td>
+</tr>
+<tr>
+<td><code>_name</code> と <code>ClapTrap::_name</code> の違いは？</td>
+<td><code>_name</code> は DiamondTrap 独自のもの、<code>ClapTrap::_name</code> は継承した親のもの</td>
+</tr>
+<tr>
+<td>whoAmI は何を表示する？</td>
+<td>DiamondTrap::_name と ClapTrap::_name の両方</td>
+</tr>
+<tr>
+<td>HP はどっちから？ EP はどっちから？</td>
+<td>HP は FragTrap(100)、EP は ScavTrap(50)、AD は FragTrap(30)</td>
+</tr>
+</tbody>
+</table>
+<hr />
+<h2 id="10">10. よくあるミス<a class="headerlink" href="#10" title="Permanent link">&para;</a></h2>
+<div class="admonition warning">
+<p class="admonition-title">virtual の付け忘れ</p>
+<div class="language-cpp highlight"><pre><span></span><code><span id="__span-27-1"><a id="__codelineno-27-1" name="__codelineno-27-1" href="#__codelineno-27-1"></a><span class="c1">// ❌ virtual なし → ClapTrap が2つできてしまう</span>
+</span><span id="__span-27-2"><a id="__codelineno-27-2" name="__codelineno-27-2" href="#__codelineno-27-2"></a><span class="k">class</span><span class="w"> </span><span class="nc">ScavTrap</span><span class="w"> </span><span class="o">:</span><span class="w"> </span><span class="k">public</span><span class="w"> </span><span class="n">ClapTrap</span><span class="w"> </span><span class="p">{</span><span class="w"> </span><span class="p">};</span>
+</span><span id="__span-27-3"><a id="__codelineno-27-3" name="__codelineno-27-3" href="#__codelineno-27-3"></a><span class="k">class</span><span class="w"> </span><span class="nc">FragTrap</span><span class="w"> </span><span class="o">:</span><span class="w"> </span><span class="k">public</span><span class="w"> </span><span class="n">ClapTrap</span><span class="w"> </span><span class="p">{</span><span class="w"> </span><span class="p">};</span>
+</span><span id="__span-27-4"><a id="__codelineno-27-4" name="__codelineno-27-4" href="#__codelineno-27-4"></a>
+</span><span id="__span-27-5"><a id="__codelineno-27-5" name="__codelineno-27-5" href="#__codelineno-27-5"></a><span class="c1">// ✅ virtual 付き → ClapTrap が1つに統合</span>
+</span><span id="__span-27-6"><a id="__codelineno-27-6" name="__codelineno-27-6" href="#__codelineno-27-6"></a><span class="k">class</span><span class="w"> </span><span class="nc">ScavTrap</span><span class="w"> </span><span class="o">:</span><span class="w"> </span><span class="k">virtual</span><span class="w"> </span><span class="k">public</span><span class="w"> </span><span class="n">ClapTrap</span><span class="w"> </span><span class="p">{</span><span class="w"> </span><span class="p">};</span>
+</span><span id="__span-27-7"><a id="__codelineno-27-7" name="__codelineno-27-7" href="#__codelineno-27-7"></a><span class="k">class</span><span class="w"> </span><span class="nc">FragTrap</span><span class="w"> </span><span class="o">:</span><span class="w"> </span><span class="k">virtual</span><span class="w"> </span><span class="k">public</span><span class="w"> </span><span class="n">ClapTrap</span><span class="w"> </span><span class="p">{</span><span class="w"> </span><span class="p">};</span>
+</span></code></pre></div>
+</div>
+<div class="admonition warning">
+<p class="admonition-title">片方だけ virtual にする</p>
+<div class="language-cpp highlight"><pre><span></span><code><span id="__span-28-1"><a id="__codelineno-28-1" name="__codelineno-28-1" href="#__codelineno-28-1"></a><span class="c1">// ❌ 片方だけだと統合されない</span>
+</span><span id="__span-28-2"><a id="__codelineno-28-2" name="__codelineno-28-2" href="#__codelineno-28-2"></a><span class="k">class</span><span class="w"> </span><span class="nc">ScavTrap</span><span class="w"> </span><span class="o">:</span><span class="w"> </span><span class="k">virtual</span><span class="w"> </span><span class="k">public</span><span class="w"> </span><span class="n">ClapTrap</span><span class="w"> </span><span class="p">{</span><span class="w"> </span><span class="p">};</span>
+</span><span id="__span-28-3"><a id="__codelineno-28-3" name="__codelineno-28-3" href="#__codelineno-28-3"></a><span class="k">class</span><span class="w"> </span><span class="nc">FragTrap</span><span class="w"> </span><span class="o">:</span><span class="w"> </span><span class="k">public</span><span class="w"> </span><span class="n">ClapTrap</span><span class="w"> </span><span class="p">{</span><span class="w"> </span><span class="p">};</span><span class="w">  </span><span class="c1">// ← virtual なし</span>
+</span><span id="__span-28-4"><a id="__codelineno-28-4" name="__codelineno-28-4" href="#__codelineno-28-4"></a>
+</span><span id="__span-28-5"><a id="__codelineno-28-5" name="__codelineno-28-5" href="#__codelineno-28-5"></a><span class="c1">// ✅ 両方に virtual</span>
+</span><span id="__span-28-6"><a id="__codelineno-28-6" name="__codelineno-28-6" href="#__codelineno-28-6"></a><span class="k">class</span><span class="w"> </span><span class="nc">ScavTrap</span><span class="w"> </span><span class="o">:</span><span class="w"> </span><span class="k">virtual</span><span class="w"> </span><span class="k">public</span><span class="w"> </span><span class="n">ClapTrap</span><span class="w"> </span><span class="p">{</span><span class="w"> </span><span class="p">};</span>
+</span><span id="__span-28-7"><a id="__codelineno-28-7" name="__codelineno-28-7" href="#__codelineno-28-7"></a><span class="k">class</span><span class="w"> </span><span class="nc">FragTrap</span><span class="w"> </span><span class="o">:</span><span class="w"> </span><span class="k">virtual</span><span class="w"> </span><span class="k">public</span><span class="w"> </span><span class="n">ClapTrap</span><span class="w"> </span><span class="p">{</span><span class="w"> </span><span class="p">};</span>
+</span></code></pre></div>
+</div>
+<div class="admonition warning">
+<p class="admonition-title">ClapTrap コンストラクタを DiamondTrap から直接呼ばない</p>
+<div class="language-cpp highlight"><pre><span></span><code><span id="__span-29-1"><a id="__codelineno-29-1" name="__codelineno-29-1" href="#__codelineno-29-1"></a><span class="c1">// ❌ ClapTrap を初期化リストで呼んでいない</span>
+</span><span id="__span-29-2"><a id="__codelineno-29-2" name="__codelineno-29-2" href="#__codelineno-29-2"></a><span class="c1">//   → ClapTrap のデフォルトコンストラクタが呼ばれる</span>
+</span><span id="__span-29-3"><a id="__codelineno-29-3" name="__codelineno-29-3" href="#__codelineno-29-3"></a><span class="c1">//   → _name が &quot;default&quot; になってしまう</span>
+</span><span id="__span-29-4"><a id="__codelineno-29-4" name="__codelineno-29-4" href="#__codelineno-29-4"></a><span class="n">DiamondTrap</span><span class="o">::</span><span class="n">DiamondTrap</span><span class="p">(</span>
+</span><span id="__span-29-5"><a id="__codelineno-29-5" name="__codelineno-29-5" href="#__codelineno-29-5"></a><span class="w">    </span><span class="k">const</span><span class="w"> </span><span class="n">std</span><span class="o">::</span><span class="n">string</span><span class="o">&amp;</span><span class="w"> </span><span class="n">name</span><span class="p">)</span>
+</span><span id="__span-29-6"><a id="__codelineno-29-6" name="__codelineno-29-6" href="#__codelineno-29-6"></a><span class="w">    </span><span class="o">:</span><span class="w"> </span><span class="n">FragTrap</span><span class="p">(</span><span class="n">name</span><span class="p">),</span>
+</span><span id="__span-29-7"><a id="__codelineno-29-7" name="__codelineno-29-7" href="#__codelineno-29-7"></a><span class="w">      </span><span class="n">ScavTrap</span><span class="p">(</span><span class="n">name</span><span class="p">),</span>
+</span><span id="__span-29-8"><a id="__codelineno-29-8" name="__codelineno-29-8" href="#__codelineno-29-8"></a><span class="w">      </span><span class="n">_name</span><span class="p">(</span><span class="n">name</span><span class="p">)</span><span class="w"> </span><span class="p">{</span><span class="w"> </span><span class="p">}</span>
+</span><span id="__span-29-9"><a id="__codelineno-29-9" name="__codelineno-29-9" href="#__codelineno-29-9"></a>
+</span><span id="__span-29-10"><a id="__codelineno-29-10" name="__codelineno-29-10" href="#__codelineno-29-10"></a><span class="c1">// ✅ ClapTrap を明示的に直接初期化</span>
+</span><span id="__span-29-11"><a id="__codelineno-29-11" name="__codelineno-29-11" href="#__codelineno-29-11"></a><span class="n">DiamondTrap</span><span class="o">::</span><span class="n">DiamondTrap</span><span class="p">(</span>
+</span><span id="__span-29-12"><a id="__codelineno-29-12" name="__codelineno-29-12" href="#__codelineno-29-12"></a><span class="w">    </span><span class="k">const</span><span class="w"> </span><span class="n">std</span><span class="o">::</span><span class="n">string</span><span class="o">&amp;</span><span class="w"> </span><span class="n">name</span><span class="p">)</span>
+</span><span id="__span-29-13"><a id="__codelineno-29-13" name="__codelineno-29-13" href="#__codelineno-29-13"></a><span class="w">    </span><span class="o">:</span><span class="w"> </span><span class="n">ClapTrap</span><span class="p">(</span><span class="n">name</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="s">&quot;_clap_name&quot;</span><span class="p">),</span>
+</span><span id="__span-29-14"><a id="__codelineno-29-14" name="__codelineno-29-14" href="#__codelineno-29-14"></a><span class="w">      </span><span class="n">FragTrap</span><span class="p">(</span><span class="n">name</span><span class="p">),</span>
+</span><span id="__span-29-15"><a id="__codelineno-29-15" name="__codelineno-29-15" href="#__codelineno-29-15"></a><span class="w">      </span><span class="n">ScavTrap</span><span class="p">(</span><span class="n">name</span><span class="p">),</span>
+</span><span id="__span-29-16"><a id="__codelineno-29-16" name="__codelineno-29-16" href="#__codelineno-29-16"></a><span class="w">      </span><span class="n">_name</span><span class="p">(</span><span class="n">name</span><span class="p">)</span><span class="w"> </span><span class="p">{</span><span class="w"> </span><span class="p">}</span>
+</span></code></pre></div>
+</div>
+<div class="admonition warning">
+<p class="admonition-title">using 宣言の欠落で曖昧エラー</p>
+<div class="language-cpp highlight"><pre><span></span><code><span id="__span-30-1"><a id="__codelineno-30-1" name="__codelineno-30-1" href="#__codelineno-30-1"></a><span class="c1">// ❌ using 宣言なし</span>
+</span><span id="__span-30-2"><a id="__codelineno-30-2" name="__codelineno-30-2" href="#__codelineno-30-2"></a><span class="k">class</span><span class="w"> </span><span class="nc">DiamondTrap</span><span class="w"> </span><span class="o">:</span>
+</span><span id="__span-30-3"><a id="__codelineno-30-3" name="__codelineno-30-3" href="#__codelineno-30-3"></a><span class="w">    </span><span class="k">public</span><span class="w"> </span><span class="n">FragTrap</span><span class="p">,</span><span class="w"> </span><span class="k">public</span><span class="w"> </span><span class="n">ScavTrap</span>
+</span><span id="__span-30-4"><a id="__codelineno-30-4" name="__codelineno-30-4" href="#__codelineno-30-4"></a><span class="p">{</span>
+</span><span id="__span-30-5"><a id="__codelineno-30-5" name="__codelineno-30-5" href="#__codelineno-30-5"></a><span class="w">    </span><span class="c1">// diamond.attack(&quot;enemy&quot;);</span>
+</span><span id="__span-30-6"><a id="__codelineno-30-6" name="__codelineno-30-6" href="#__codelineno-30-6"></a><span class="w">    </span><span class="c1">// → コンパイルエラー: 曖昧な呼び出し</span>
+</span><span id="__span-30-7"><a id="__codelineno-30-7" name="__codelineno-30-7" href="#__codelineno-30-7"></a><span class="p">};</span>
+</span><span id="__span-30-8"><a id="__codelineno-30-8" name="__codelineno-30-8" href="#__codelineno-30-8"></a>
+</span><span id="__span-30-9"><a id="__codelineno-30-9" name="__codelineno-30-9" href="#__codelineno-30-9"></a><span class="c1">// ✅ using 宣言で ScavTrap::attack を選択</span>
+</span><span id="__span-30-10"><a id="__codelineno-30-10" name="__codelineno-30-10" href="#__codelineno-30-10"></a><span class="k">class</span><span class="w"> </span><span class="nc">DiamondTrap</span><span class="w"> </span><span class="o">:</span>
+</span><span id="__span-30-11"><a id="__codelineno-30-11" name="__codelineno-30-11" href="#__codelineno-30-11"></a><span class="w">    </span><span class="k">public</span><span class="w"> </span><span class="n">FragTrap</span><span class="p">,</span><span class="w"> </span><span class="k">public</span><span class="w"> </span><span class="n">ScavTrap</span>
+</span><span id="__span-30-12"><a id="__codelineno-30-12" name="__codelineno-30-12" href="#__codelineno-30-12"></a><span class="p">{</span>
+</span><span id="__span-30-13"><a id="__codelineno-30-13" name="__codelineno-30-13" href="#__codelineno-30-13"></a><span class="w">    </span><span class="k">using</span><span class="w"> </span><span class="n">ScavTrap</span><span class="o">::</span><span class="n">attack</span><span class="p">;</span>
+</span><span id="__span-30-14"><a id="__codelineno-30-14" name="__codelineno-30-14" href="#__codelineno-30-14"></a><span class="p">};</span>
+</span></code></pre></div>
+</div>
+<div class="admonition warning">
+<p class="admonition-title">whoAmI で ClapTrap::_name を忘れる</p>
+<div class="language-cpp highlight"><pre><span></span><code><span id="__span-31-1"><a id="__codelineno-31-1" name="__codelineno-31-1" href="#__codelineno-31-1"></a><span class="c1">// ❌ _name だけ表示</span>
+</span><span id="__span-31-2"><a id="__codelineno-31-2" name="__codelineno-31-2" href="#__codelineno-31-2"></a><span class="c1">//    → DiamondTrap::_name しか出ない</span>
+</span><span id="__span-31-3"><a id="__codelineno-31-3" name="__codelineno-31-3" href="#__codelineno-31-3"></a><span class="kt">void</span><span class="w"> </span><span class="nf">DiamondTrap::whoAmI</span><span class="p">(</span><span class="kt">void</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+</span><span id="__span-31-4"><a id="__codelineno-31-4" name="__codelineno-31-4" href="#__codelineno-31-4"></a><span class="w">    </span><span class="n">std</span><span class="o">::</span><span class="n">cout</span><span class="w"> </span><span class="o">&lt;&lt;</span><span class="w"> </span><span class="s">&quot;I am &quot;</span><span class="w"> </span><span class="o">&lt;&lt;</span><span class="w"> </span><span class="n">_name</span>
+</span><span id="__span-31-5"><a id="__codelineno-31-5" name="__codelineno-31-5" href="#__codelineno-31-5"></a><span class="w">              </span><span class="o">&lt;&lt;</span><span class="w"> </span><span class="n">std</span><span class="o">::</span><span class="n">endl</span><span class="p">;</span>
+</span><span id="__span-31-6"><a id="__codelineno-31-6" name="__codelineno-31-6" href="#__codelineno-31-6"></a><span class="p">}</span>
+</span><span id="__span-31-7"><a id="__codelineno-31-7" name="__codelineno-31-7" href="#__codelineno-31-7"></a>
+</span><span id="__span-31-8"><a id="__codelineno-31-8" name="__codelineno-31-8" href="#__codelineno-31-8"></a><span class="c1">// ✅ 両方の _name を表示</span>
+</span><span id="__span-31-9"><a id="__codelineno-31-9" name="__codelineno-31-9" href="#__codelineno-31-9"></a><span class="kt">void</span><span class="w"> </span><span class="nf">DiamondTrap::whoAmI</span><span class="p">(</span><span class="kt">void</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+</span><span id="__span-31-10"><a id="__codelineno-31-10" name="__codelineno-31-10" href="#__codelineno-31-10"></a><span class="w">    </span><span class="n">std</span><span class="o">::</span><span class="n">cout</span><span class="w"> </span><span class="o">&lt;&lt;</span><span class="w"> </span><span class="s">&quot;I am DiamondTrap &quot;</span>
+</span><span id="__span-31-11"><a id="__codelineno-31-11" name="__codelineno-31-11" href="#__codelineno-31-11"></a><span class="w">              </span><span class="o">&lt;&lt;</span><span class="w"> </span><span class="n">_name</span>
+</span><span id="__span-31-12"><a id="__codelineno-31-12" name="__codelineno-31-12" href="#__codelineno-31-12"></a><span class="w">              </span><span class="o">&lt;&lt;</span><span class="w"> </span><span class="s">&quot; and my ClapTrap &quot;</span>
+</span><span id="__span-31-13"><a id="__codelineno-31-13" name="__codelineno-31-13" href="#__codelineno-31-13"></a><span class="w">              </span><span class="o">&lt;&lt;</span><span class="w"> </span><span class="s">&quot;name is &quot;</span>
+</span><span id="__span-31-14"><a id="__codelineno-31-14" name="__codelineno-31-14" href="#__codelineno-31-14"></a><span class="w">              </span><span class="o">&lt;&lt;</span><span class="w"> </span><span class="n">ClapTrap</span><span class="o">::</span><span class="n">_name</span>
+</span><span id="__span-31-15"><a id="__codelineno-31-15" name="__codelineno-31-15" href="#__codelineno-31-15"></a><span class="w">              </span><span class="o">&lt;&lt;</span><span class="w"> </span><span class="n">std</span><span class="o">::</span><span class="n">endl</span><span class="p">;</span>
+</span><span id="__span-31-16"><a id="__codelineno-31-16" name="__codelineno-31-16" href="#__codelineno-31-16"></a><span class="p">}</span>
+</span></code></pre></div>
+</div>
+<div class="admonition warning">
+<p class="admonition-title">ステータスの上書き忘れ</p>
+<div class="language-cpp highlight"><pre><span></span><code><span id="__span-32-1"><a id="__codelineno-32-1" name="__codelineno-32-1" href="#__codelineno-32-1"></a><span class="c1">// ❌ ステータスを上書きしない</span>
+</span><span id="__span-32-2"><a id="__codelineno-32-2" name="__codelineno-32-2" href="#__codelineno-32-2"></a><span class="c1">//    → ScavTrap の値(HP=100,EP=50,AD=20) のまま</span>
+</span><span id="__span-32-3"><a id="__codelineno-32-3" name="__codelineno-32-3" href="#__codelineno-32-3"></a><span class="c1">//    → subject 仕様と合わない</span>
+</span><span id="__span-32-4"><a id="__codelineno-32-4" name="__codelineno-32-4" href="#__codelineno-32-4"></a><span class="n">DiamondTrap</span><span class="o">::</span><span class="n">DiamondTrap</span><span class="p">(</span>
+</span><span id="__span-32-5"><a id="__codelineno-32-5" name="__codelineno-32-5" href="#__codelineno-32-5"></a><span class="w">    </span><span class="k">const</span><span class="w"> </span><span class="n">std</span><span class="o">::</span><span class="n">string</span><span class="o">&amp;</span><span class="w"> </span><span class="n">name</span><span class="p">)</span>
+</span><span id="__span-32-6"><a id="__codelineno-32-6" name="__codelineno-32-6" href="#__codelineno-32-6"></a><span class="w">    </span><span class="o">:</span><span class="w"> </span><span class="n">ClapTrap</span><span class="p">(</span><span class="n">name</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="s">&quot;_clap_name&quot;</span><span class="p">),</span>
+</span><span id="__span-32-7"><a id="__codelineno-32-7" name="__codelineno-32-7" href="#__codelineno-32-7"></a><span class="w">      </span><span class="n">FragTrap</span><span class="p">(</span><span class="n">name</span><span class="p">),</span>
+</span><span id="__span-32-8"><a id="__codelineno-32-8" name="__codelineno-32-8" href="#__codelineno-32-8"></a><span class="w">      </span><span class="n">ScavTrap</span><span class="p">(</span><span class="n">name</span><span class="p">),</span>
+</span><span id="__span-32-9"><a id="__codelineno-32-9" name="__codelineno-32-9" href="#__codelineno-32-9"></a><span class="w">      </span><span class="n">_name</span><span class="p">(</span><span class="n">name</span><span class="p">)</span><span class="w"> </span><span class="p">{</span><span class="w"> </span><span class="p">}</span>
+</span><span id="__span-32-10"><a id="__codelineno-32-10" name="__codelineno-32-10" href="#__codelineno-32-10"></a>
+</span><span id="__span-32-11"><a id="__codelineno-32-11" name="__codelineno-32-11" href="#__codelineno-32-11"></a><span class="c1">// ✅ 仕様通りに上書き</span>
+</span><span id="__span-32-12"><a id="__codelineno-32-12" name="__codelineno-32-12" href="#__codelineno-32-12"></a><span class="c1">//    HP=FragTrap(100), EP=ScavTrap(50),</span>
+</span><span id="__span-32-13"><a id="__codelineno-32-13" name="__codelineno-32-13" href="#__codelineno-32-13"></a><span class="c1">//    AD=FragTrap(30)</span>
+</span><span id="__span-32-14"><a id="__codelineno-32-14" name="__codelineno-32-14" href="#__codelineno-32-14"></a><span class="n">DiamondTrap</span><span class="o">::</span><span class="n">DiamondTrap</span><span class="p">(</span>
+</span><span id="__span-32-15"><a id="__codelineno-32-15" name="__codelineno-32-15" href="#__codelineno-32-15"></a><span class="w">    </span><span class="k">const</span><span class="w"> </span><span class="n">std</span><span class="o">::</span><span class="n">string</span><span class="o">&amp;</span><span class="w"> </span><span class="n">name</span><span class="p">)</span>
+</span><span id="__span-32-16"><a id="__codelineno-32-16" name="__codelineno-32-16" href="#__codelineno-32-16"></a><span class="w">    </span><span class="o">:</span><span class="w"> </span><span class="n">ClapTrap</span><span class="p">(</span><span class="n">name</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="s">&quot;_clap_name&quot;</span><span class="p">),</span>
+</span><span id="__span-32-17"><a id="__codelineno-32-17" name="__codelineno-32-17" href="#__codelineno-32-17"></a><span class="w">      </span><span class="n">FragTrap</span><span class="p">(</span><span class="n">name</span><span class="p">),</span>
+</span><span id="__span-32-18"><a id="__codelineno-32-18" name="__codelineno-32-18" href="#__codelineno-32-18"></a><span class="w">      </span><span class="n">ScavTrap</span><span class="p">(</span><span class="n">name</span><span class="p">),</span>
+</span><span id="__span-32-19"><a id="__codelineno-32-19" name="__codelineno-32-19" href="#__codelineno-32-19"></a><span class="w">      </span><span class="n">_name</span><span class="p">(</span><span class="n">name</span><span class="p">)</span>
+</span><span id="__span-32-20"><a id="__codelineno-32-20" name="__codelineno-32-20" href="#__codelineno-32-20"></a><span class="p">{</span>
+</span><span id="__span-32-21"><a id="__codelineno-32-21" name="__codelineno-32-21" href="#__codelineno-32-21"></a><span class="w">    </span><span class="n">_hitPoints</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">100</span><span class="p">;</span>
+</span><span id="__span-32-22"><a id="__codelineno-32-22" name="__codelineno-32-22" href="#__codelineno-32-22"></a><span class="w">    </span><span class="n">_energyPoints</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">50</span><span class="p">;</span>
+</span><span id="__span-32-23"><a id="__codelineno-32-23" name="__codelineno-32-23" href="#__codelineno-32-23"></a><span class="w">    </span><span class="n">_attackDamage</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">30</span><span class="p">;</span>
+</span><span id="__span-32-24"><a id="__codelineno-32-24" name="__codelineno-32-24" href="#__codelineno-32-24"></a><span class="p">}</span>
+</span></code></pre></div>
+</div>
+<hr />
+<h2 id="11">11. 次のモジュールへ<a class="headerlink" href="#11" title="Permanent link">&para;</a></h2>
+<p>cpp03 お疲れ様でした！ 一番の山場を越えました。</p>
+<p>次の <a href="../../cpp04/">cpp04</a> では <strong>ポリモーフィズム</strong> と <strong>抽象クラス</strong> を学びます:</p>
+<ul>
+<li><strong>virtual 関数</strong> — cpp03 の virtual 継承とは <strong>別の概念</strong> に注意！</li>
+<li><strong>ポリモーフィズム</strong> — 基底クラスのポインタ/参照で派生クラスのメソッドを呼ぶ</li>
+<li><strong>抽象クラス</strong> — 純粋仮想関数を持つ、インスタンス化できないクラス</li>
+<li><strong>interface</strong> — すべて純粋仮想関数のクラス</li>
+</ul>
+<p>cpp03 で学んだ継承を土台に、さらに強力な設計テクニックを学びます。</p>
+
+
+
+
+
+
+
+
+
+
+
+
+                
+              </article>
+            </div>
+          
+          
+  <script>var tabs=__md_get("__tabs");if(Array.isArray(tabs))e:for(var set of document.querySelectorAll(".tabbed-set")){var labels=set.querySelector(".tabbed-labels");for(var tab of tabs)for(var label of labels.getElementsByTagName("label"))if(label.innerText.trim()===tab){var input=document.getElementById(label.htmlFor);input.checked=!0;continue e}}</script>
+
+<script>var target=document.getElementById(location.hash.slice(1));target&&target.name&&(target.checked=target.name.startsWith("__tabbed_"))</script>
+        </div>
+        
+          <button type="button" class="md-top md-icon" data-md-component="top" hidden>
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M13 20h-2V8l-5.5 5.5-1.42-1.42L12 4.16l7.92 7.92-1.42 1.42L13 8z"/></svg>
+  ページトップへ戻る
+</button>
+        
+      </main>
+      
+        <footer class="md-footer">
+  
+  <div class="md-footer-meta md-typeset">
+    <div class="md-footer-meta__inner md-grid">
+      <div class="md-copyright">
+  
+  
+    Made with
+    <a href="https://squidfunk.github.io/mkdocs-material/" target="_blank" rel="noopener">
+      Material for MkDocs
+    </a>
+  
+</div>
+      
+    </div>
+  </div>
+</footer>
+      
+    </div>
+    <div class="md-dialog" data-md-component="dialog">
+      <div class="md-dialog__inner md-typeset"></div>
+    </div>
+    
+    
+    
+      
+      
+      <script id="__config" type="application/json">{"annotate": null, "base": "../..", "features": ["navigation.instant", "navigation.tracking", "navigation.tabs", "navigation.sections", "navigation.indexes", "navigation.top", "toc.follow", "search.suggest", "search.highlight", "search.share", "content.code.copy", "content.code.annotate", "content.tabs.link", "content.action.edit"], "search": "../../assets/javascripts/workers/search.2c215733.min.js", "tags": null, "translations": {"clipboard.copied": "\u30b3\u30d4\u30fc\u3057\u307e\u3057\u305f", "clipboard.copy": "\u30af\u30ea\u30c3\u30d7\u30dc\u30fc\u30c9\u3078\u30b3\u30d4\u30fc", "search.result.more.one": "\u3053\u306e\u30da\u30fc\u30b8\u5185\u306b\u3082\u30461\u4ef6\u898b\u3064\u304b\u308a\u307e\u3057\u305f", "search.result.more.other": "\u3053\u306e\u30da\u30fc\u30b8\u5185\u306b\u3042\u3068#\u4ef6\u898b\u3064\u304b\u308a\u307e\u3057\u305f", "search.result.none": "\u4f55\u3082\u898b\u3064\u304b\u308a\u307e\u305b\u3093\u3067\u3057\u305f", "search.result.one": "1\u4ef6\u898b\u3064\u304b\u308a\u307e\u3057\u305f", "search.result.other": "#\u4ef6\u898b\u3064\u304b\u308a\u307e\u3057\u305f", "search.result.placeholder": "\u691c\u7d22\u30ad\u30fc\u30ef\u30fc\u30c9\u3092\u5165\u529b\u3057\u3066\u304f\u3060\u3055\u3044", "search.result.term.missing": "\u691c\u7d22\u306b\u542b\u307e\u308c\u306a\u3044", "select.version": "\u30d0\u30fc\u30b8\u30e7\u30f3\u5207\u308a\u66ff\u3048"}, "version": null}</script>
+    
+    
+      <script src="../../assets/javascripts/bundle.79ae519e.min.js"></script>
+      
+        <script src="../../js/user-notes.js"></script>
+      
+    
+  </body>
+</html>
