@@ -22,6 +22,23 @@
 
 ---
 
+## 🎯 なぜこの問題？（学習意図）
+
+42 が cpp00 の最後（しかも任意）にこれを置く理由：
+
+| 学ばせたいこと | この問題で出会う形 |
+|---|---|
+| **`static` メンバ変数** | 全口座で共有する `_nbAccounts` `_totalAmount` などの「クラスに 1 個」 |
+| **`static` メンバ関数** | インスタンスなしで呼べる `Account::displayAccountsInfos()` |
+| **コンストラクタ / デストラクタの追跡** | `[timestamp] index:N;amount:42;created` のログを「一致させる」テスト体験 |
+| **ヘッダから実装を逆算** | `.hpp` だけを渡されて `.cpp` を書く = 「型シグネチャを読み解く」訓練 |
+| **テスト駆動の感覚** | 期待出力（テスタログ）との `diff` ゼロを目指すワークフロー |
+
+つまり「**インスタンスを跨いで状態を共有する仕組み**を、ヘッダ + ログだけから読み解いて実装する」のが真の狙い。
+任意課題ですが、**static の理解は cpp02 以降で何度も登場する** ので、ここで体感しておく価値が高いです。
+
+---
+
 ## 1. このexerciseで学ぶこと
 
 お手本のヘッダ (`Account.hpp`) とログファイルだけを頼りに、
@@ -110,6 +127,34 @@ C++ では「クラスの `private` に隠せる」ので安全です。
 +-----------------------------------+
 ```
 
+**「A も B も同じ値を見る」のミニ実例:**
+
+```cpp
+Account a(100);   // _nbAccounts: 0 → 1
+Account b(200);   // _nbAccounts: 1 → 2
+// a も b も同じ _nbAccounts を見ている
+// a._nbAccounts は 2、b._nbAccounts も 2
+```
+
+`a` のオブジェクトでカウントを増やすと、`b` から見ても増えています。**「全員で 1 つの黒板を共有している」**のがイメージできれば OK です。
+
+**使いどころ:**
+
+- 全インスタンスで共有すべき値: **総数**, **総合計**, **連番 ID 発行**, **シングルトン的な状態**
+- 例: 「現在の口座数」「これまでの取引総数」「最後に発行されたチケット番号」
+- **逆に使わない**: 各オブジェクト固有の値 (例: 個別の残高、名前、座標) — これらは普通のメンバ変数
+
+**グローバル変数 vs static メンバ — どう違う？**
+
+| | C のグローバル変数 | C++ の `private static` メンバ |
+|---|---|---|
+| アクセス範囲 | 全ファイルから (`extern` で他から触れる) | クラス内のメソッドだけ |
+| 名前衝突 | 起きやすい (`g_count` などの命名規則で対処) | クラス名で隔離されるので衝突しない |
+| カプセル化 | できない (誰でも書き換え可能) | private にできて、setter/getter 経由で制御 |
+| 関連づけ | 「どのデータと一緒か」がコードを読まないと分からない | クラスの中にあるので**一目瞭然** |
+
+つまり static メンバは「**グローバル変数 + クラスのカプセル化**」の合わせ技です。
+
 !!! danger "static 変数は .cpp で実体を定義する"
     ヘッダで `static int _nbAccounts;` と書くのは
     **宣言**だけです。
@@ -131,6 +176,27 @@ C++ では「クラスの `private` に隠せる」ので安全です。
       Account::_nbAccounts
     ```
 
+    **なぜ `.cpp` に書く？ なぜヘッダではダメ？**
+
+    ヘッダファイルは **いろんな `.cpp` から `#include` される** ので、ヘッダに `int Account::_nbAccounts = 0;` と書くと、**それを include しているすべての `.cpp` ファイルに同じ実体が複製される**ことになります。
+
+    ```
+    main.cpp     → include Account.hpp → 実体ができる (1 つ目)
+    Account.cpp  → include Account.hpp → 実体ができる (2 つ目)
+    tests.cpp    → include Account.hpp → 実体ができる (3 つ目)
+    ```
+
+    リンカが「同じ名前の実体が 3 つある！どれが本物？」と困って **重複定義エラー (ODR 違反)** になります。なので「**宣言はヘッダ、実体は 1 つの `.cpp` に 1 回だけ**」という分担にします。
+
+    **コンパイルとリンクの 2 段階:**
+
+    `Undefined symbols: Account::_nbAccounts` というエラーは「**コンパイル**は通ったが**リンク**で失敗した」状態です。
+
+    1. **コンパイル**: 各 `.cpp` を機械語のオブジェクトファイル (`.o`) に翻訳。この段階ではヘッダの宣言だけ見えれば OK
+    2. **リンク**: 全 `.o` を 1 つのバイナリにつなげる。この段階で「`_nbAccounts` の実体はどこ？」を探す。**実体が見つからない**と Undefined symbols エラー
+
+    `static int _nbAccounts;` の宣言は「**この変数は別の場所に存在しますよ**」という約束を書いているだけなので、別の場所 (= どれか 1 つの `.cpp`) に実体がないと約束が守れない、というイメージです。
+
 ### `static` メンバ関数って何？
 
 **オブジェクトを作らなくても呼べる関数**です。
@@ -151,6 +217,17 @@ Account a(100);
 int amount = a.checkAmount();
 ```
 
+**使いどころ:**
+
+- **全インスタンスを横断する集計**: 「合計口座数」「総取引額」など、特定の口座 (オブジェクト) に紐付かない情報の取得
+- **ファクトリー関数 (工場関数)**: `Account::createFromFile()` のように「これから作るためのもの」 — まだオブジェクトがないので普通のメソッドにできない
+- **ユーティリティ関数のグループ化**: 関連するヘルパー関数をクラスにまとめる名前空間的な使い方
+- **ログ・タイムスタンプ出力**: この exercise の `_displayTimestamp()` のように「全口座共通の補助動作」
+
+**逆に使わない場面:**
+
+- 各オブジェクトの状態を読み書きする処理 (`a.getAmount()` のような) — これは普通のメンバ関数
+
 !!! warning "static 関数から普通のメンバにはアクセスできない"
     static 関数は `this` ポインタを持たないので、
     普通のメンバ変数には触れません。
@@ -168,6 +245,22 @@ int amount = a.checkAmount();
         return _nbAccounts;  // OK!
     }
     ```
+
+    **なぜ this が無いの？**
+
+    普通のメンバ関数 `a.checkAmount()` は、内部で**暗黙の引数 `this`** が渡されています:
+
+    ```cpp
+    // 内部的にはこう書かれているのと同じ
+    int Account::checkAmount(Account *this) {
+        return this->_amount;
+        //     ^^^^^^^^^^^^ どの口座の残高を返すか
+    }
+    ```
+
+    一方 static 関数は `Account::getNbAccounts()` のように **オブジェクトなしで呼ばれる** ので、「どの口座？」という情報そのものがありません。だから `this` が無く、結果として `_amount` のような**特定オブジェクトのメンバ**にもアクセスできません。
+
+    static メンバ (`_nbAccounts` のような) にはアクセスできるのは、これが「どのオブジェクトのものでもなく、クラス全体に 1 つだけ」存在しているからです。
 
 ### `typedef` って何？
 
@@ -344,40 +437,26 @@ diff got.log expect.log
 
 ### プログラムの流れ
 
-```
-スタート (tests.cpp の main が実行される)
-  |
-  v
-8つの口座を作る
-  → 各口座のコンストラクタが走る
-  → "index:N;amount:X;created" を出力
-  |
-  v
-全口座の集計を表示
-  → "accounts:8;total:20049;..." を出力
-  |
-  v
-各口座の状態を表示
-  → "index:N;amount:X;deposits:0;..." を出力
-  |
-  v
-各口座に入金する
-  → "index:N;p_amount:X;deposit:Y;..." を出力
-  |
-  v
-再び集計と状態を表示
-  |
-  v
-各口座から引き出す
-  → 残高不足なら "withdrawal:refused"
-  → 成功なら "withdrawal:Y;amount:Z;..."
-  |
-  v
-再び集計と状態を表示
-  |
-  v
-main() 終了 → 各口座のデストラクタが走る
-  → "index:N;amount:X;closed" を出力
+```mermaid
+flowchart TD
+    Start([tests.cpp の main 開始]) --> Ctor[8 つの口座を生成<br/>各 ctor が created ログ]
+    Ctor --> Summary1[全口座の集計表示<br/>accounts:8;total:...]
+    Summary1 --> Status1[各口座の状態表示<br/>index:N;amount:X;deposits:0;...]
+    Status1 --> Deposit[各口座に入金<br/>p_amount → amount, nb_deposits++]
+    Deposit --> Summary2[再び集計と状態表示]
+    Summary2 --> Withdraw{残高は足りる?}
+    Withdraw -->|不足| Refused[withdrawal:refused]
+    Withdraw -->|十分| OK[withdrawal:Y;amount:Z;...]
+    Refused --> Summary3[再び集計と状態表示]
+    OK --> Summary3
+    Summary3 --> Dtor[main 終了<br/>各 dtor が closed ログ]
+    Dtor --> End([プログラム終了])
+
+    style Start fill:#E3F2FD
+    style End fill:#C8E6C9
+    style Ctor fill:#FFE0B2
+    style Dtor fill:#FFCDD2
+    style Withdraw fill:#FFF9C4
 ```
 
 ### 5.1 `Account.hpp` -- 与えられたヘッダ
@@ -808,16 +887,16 @@ diff got.log expect.log
 
 ## 7. ディフェンスで聞かれること
 
-| 質問 | 答え方 |
-|------|--------|
-| `static` メンバ変数とは何か？ | クラスの**全インスタンスで共有**される変数。`Account::_nbAccounts` のように1つだけ存在する。口座の総数や合計残高のように、個々のオブジェクトではなくクラス全体の情報を管理するのに使う |
-| `static` メンバ関数とは何か？ | インスタンスなしで呼べる関数。`Account::getNbAccounts()` のように使う。`this` ポインタを持たないので、非 static メンバには直接アクセスできない |
-| なぜ `.cpp` に `int Account::_nbAccounts = 0;` が必要？ | ヘッダの `static int _nbAccounts;` は宣言だけ。実体は `.cpp` で定義する必要がある。忘れるとリンカエラー（undefined reference）になる |
-| コンストラクタの初期化リストとは？ | `Account(int d) : _amount(d), _nbDeposits(0) { }` のように、本体の前でメンバを初期化する方法。代入より効率的で、const メンバや参照メンバには必須 |
-| `_displayTimestamp` はどう実装した？ | `<ctime>` の `std::time()` で現在時刻を取得し、`std::strftime` で `[%Y%m%d_%H%M%S] ` にフォーマット。末尾のスペースを忘れるとログがずれる |
-| なぜデストラクタの順番が逆になることがある？ | C++ のスタック上のオブジェクトは構築の逆順（LIFO）で破棄される。`vector` 内のオブジェクトも末尾から順にデストラクタが呼ばれる場合がある |
-| `typedef Account t;` は何のため？ | `Account` 型に `t` という別名を付ける。`tests.cpp` が `Account::t` という書き方を使っているため |
-| private コンストラクタの意味は？ | `Account(void)` を private にすることで、引数なしの `Account a;` を禁止している。初期預金額なしで口座を作れないようにする意図 |
+| 質問 | 答え方 | 実装で言うと |
+|------|--------|-------------|
+| `static` メンバ変数とは何か？ | 全インスタンスで共有される、クラスに 1 個だけの変数 | `Account.hpp` の `static int _nbAccounts;` `static int _totalAmount;` ほか 3 つ |
+| `static` メンバ関数とは何か？ | インスタンス無しで呼べる関数。`this` を持たない | `Account::displayAccountsInfos()` など。`Account::` のスコープ解決で呼ぶ |
+| なぜ `.cpp` に `int Account::_nbAccounts = 0;` が必要？ | ヘッダは宣言、`.cpp` で実体定義しないとリンカエラー | `Account.cpp` の冒頭で 5 つの static メンバの実体定義を並べる |
+| コンストラクタの初期化リストとは？ | 本体前でメンバを初期化。代入より効率的、const / 参照には必須 | `Account::Account(int d) : _accountIndex(_nbAccounts++), _amount(d), _nbDeposits(0), _nbWithdrawals(0)` |
+| `_displayTimestamp` はどう実装した？ | `std::time()` + `std::strftime` で `[%Y%m%d_%H%M%S] ` 形式 | `Account.cpp` の static 関数 `_displayTimestamp()`。末尾スペースまで含めて 1 関数にまとめる |
+| デストラクタの順番が逆になることがあるのはなぜ？ | スタック / 配列上のオブジェクトは構築の逆順（LIFO）で破棄 | `tests.cpp` の `Account` 配列の末尾から順に `closed` ログが出るのを `diff` で確認 |
+| `typedef Account t;` は何のため？ | `Account` 型に `t` という別名。テストコードの呼び出し簡略化 | `Account.hpp` 末尾の `typedef Account t;` 。`tests.cpp` が `Account::t` で参照する |
+| private コンストラクタの意味は？ | 引数なし生成を禁止。初期預金 0 円口座を作らせない意図 | `Account.hpp` の `private:` 配下 `Account( void );`。デフォルト生成を封印 |
 
 ---
 
@@ -893,6 +972,27 @@ diff got.log expect.log
     ```
     static 関数は `this` を持たないので、
     インスタンスメンバにはアクセスできません。
+
+---
+
+## 💡 ここまでの学びのまとめ
+
+このページで身についたこと:
+
+- **`static` メンバ変数** = クラスに 1 個。インスタンスを跨いで共有
+- **`.hpp` で宣言、`.cpp` で実体定義**（`int Account::_nbAccounts = 0;`）を忘れない
+- **`static` メンバ関数** はインスタンスなしで呼べる代わりに `this` がない
+- **コンストラクタの初期化子リスト** で「代入」ではなく「初期化」する
+- **デストラクタの呼び出し順は構築の逆**（LIFO）
+- **テスタログとの `diff` ゼロ** をゴールにする = 期待 I/O 駆動の感覚
+
+!!! tip "ここで詰まったら"
+    - 「リンカが `undefined reference` と言う」→ `.cpp` での実体定義漏れ
+    - 「ログが揃わない」→ タイムスタンプの末尾スペース、または `;` の有無
+    - 「`Account a;` でコンパイルエラー」→ デフォルトコンストラクタが private、これは仕様
+
+cpp00 はここで終了。次の **[cpp01](../cpp01/index.md)** では
+**メモリ確保** (`new` / `delete`) と **参照** に踏み込みます。
 
 ---
 

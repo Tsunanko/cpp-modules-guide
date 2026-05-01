@@ -280,3 +280,85 @@
         display: none !important;
     }
 }
+
+/* =====================================================
+ * Phase 7-A: コード表示・本文構造の視認性改善
+ * 本文・コード本体・日本語コメントの 3 層を視覚的に分離する
+ * ===================================================== */
+
+/* --- コードブロック全体: 本文との境界を明確化 --- */
+.md-typeset .highlight {
+    border-left: 3px solid var(--md-primary-fg-color);
+    border-radius: 4px;
+}
+
+/* --- コメント (// や /* */) のコントラスト強化 --- */
+/* Pygments クラス: .c=Comment, .c1=Single-line, .cm=Multi-line, .cs=Special, .cp=Preproc, .cpf=PreprocFile */
+[data-md-color-scheme="default"] .md-typeset .highlight .c,
+[data-md-color-scheme="default"] .md-typeset .highlight .c1,
+[data-md-color-scheme="default"] .md-typeset .highlight .cm,
+[data-md-color-scheme="default"] .md-typeset .highlight .cs {
+    color: #2e7d32;
+    font-style: italic;
+    background: rgba(46, 125, 50, 0.07);
+    border-radius: 2px;
+    padding: 0 2px;
+}
+[data-md-color-scheme="slate"] .md-typeset .highlight .c,
+[data-md-color-scheme="slate"] .md-typeset .highlight .c1,
+[data-md-color-scheme="slate"] .md-typeset .highlight .cm,
+[data-md-color-scheme="slate"] .md-typeset .highlight .cs {
+    color: #a5d6a7;
+    font-style: italic;
+    background: rgba(165, 214, 167, 0.10);
+    border-radius: 2px;
+    padding: 0 2px;
+}
+
+/* --- 行ハイライト (hl_lines): いま注目すべき行を明示 --- */
+[data-md-color-scheme="default"] .md-typeset .highlight .hll {
+    background: rgba(255, 213, 79, 0.20);
+    box-shadow: inset 3px 0 0 #ffa726;
+}
+[data-md-color-scheme="slate"] .md-typeset .highlight .hll {
+    background: rgba(255, 213, 79, 0.10);
+    box-shadow: inset 3px 0 0 #ffb74d;
+}
+
+/* --- 水平線 (---) の装飾: セクション境界を視覚的に強化 --- */
+.md-typeset hr {
+    border: none;
+    height: 2px;
+    background: linear-gradient(
+        to right,
+        transparent,
+        var(--md-default-fg-color--lighter, rgba(0, 0, 0, 0.2)),
+        transparent
+    );
+    margin: 2.5em 0;
+}
+
+/* --- H2: セクション開始を明示する左罫線 --- */
+.md-typeset h2 {
+    border-left: 4px solid var(--md-primary-fg-color);
+    padding-left: 0.6em;
+    line-height: 1.4;
+}
+
+/* --- H3: 控えめな左罫線 --- */
+.md-typeset h3 {
+    border-left: 3px solid var(--md-default-fg-color--lightest, rgba(0, 0, 0, 0.15));
+    padding-left: 0.5em;
+}
+
+/* --- インラインコード `xxx` を本文と区別しやすく --- */
+.md-typeset code {
+    padding: 0.1em 0.35em;
+    border-radius: 3px;
+}
+
+/* --- admonition「abstract」(読む順を示す) の見栄え調整 --- */
+.md-typeset .admonition.abstract,
+.md-typeset details.abstract {
+    border-left-width: 4px;
+}

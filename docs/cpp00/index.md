@@ -25,6 +25,26 @@ cpp00 は C++ モジュール全9回 (cpp00〜cpp09) の**入門編**です。
                 • std::getline
 ```
 
+## このマップに出てくる用語の最低限の定義
+
+上のマップで初めて見る単語が多いはずなので、まず **1 行ずつの最小定義** を載せます。詳細は ex01/ex02 で各概念を初登場した時に「〇〇って何？」形式で丁寧に解説します。
+
+| 用語 | 1 行で言うと | 詳しく学ぶ場所 |
+|---|---|---|
+| **`namespace`** | 関数や変数がぶつからないように区切る「住所」 | [ex00 Megaphone](ex00-megaphone.md) |
+| **`std::cout`** | `printf` の代わりの出力装置 (`std` という住所にいる) | [ex00 Megaphone](ex00-megaphone.md) |
+| **`class`** | データと関数を 1 つの箱にまとめる仕組み (C の `struct` の進化版) | [ex01 PhoneBook](ex01-phonebook.md) |
+| **`public` / `private`** | クラスの中で「外から触れる/触れない」を分けるラベル | [ex01 PhoneBook](ex01-phonebook.md) |
+| **コンストラクタ** | オブジェクトが作られた瞬間に**自動で呼ばれる関数**。初期化担当 | [ex01 PhoneBook](ex01-phonebook.md) |
+| **デストラクタ** | オブジェクトが消える瞬間に**自動で呼ばれる関数**。後片付け担当 | [ex01 PhoneBook](ex01-phonebook.md) |
+| **const 参照** | 「変更しない」と約束した変数の別名。コピーせずに渡せる | [ex01 PhoneBook](ex01-phonebook.md) |
+| **`std::string`** | 可変長の文字列クラス (`char[]` の上位互換) | [ex01 PhoneBook](ex01-phonebook.md) |
+| **static メンバ** | 1 つのクラスに 1 つだけ存在する**全インスタンス共有の変数**。インスタンス A も B も同じ値を見る | [ex02 Account](ex02-account.md) |
+| **`typedef`** | 型に**別名**を付ける機能 (`typedef int t_count;` なら `t_count` は `int` の別名) | [ex02 Account](ex02-account.md) |
+
+!!! tip "読み進める順番"
+    各 exercise には「2. 新しい概念の解説」セクションがあります。**そこを最初に読む**と、コード解説に入る前に概念が腹落ちします。
+
 ## 3 つの exercise と所要時間の目安
 
 | # | 名前 | 難度 | 所要時間 | 主要トピック |
